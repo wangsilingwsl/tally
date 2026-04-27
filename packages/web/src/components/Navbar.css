@@ -1,0 +1,130 @@
+/* ============================================================
+ * 顶部导航栏样式
+ * ============================================================ */
+
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background-color: var(--color-bg-card);
+  box-shadow: var(--shadow-ring);
+}
+
+.navbar-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 var(--space-4);
+  height: 56px;
+}
+
+/* Logo */
+.navbar-logo {
+  font-family: var(--font-title);
+  font-size: var(--text-lg);
+  font-weight: var(--font-bold);
+  color: var(--color-text-brand);
+  white-space: nowrap;
+}
+
+.navbar-logo:hover {
+  color: var(--color-brand-hover);
+}
+
+/* 导航链接 */
+.navbar-links {
+  display: flex;
+  gap: var(--space-1);
+}
+
+.nav-link {
+  font-size: var(--text-sm);
+  font-weight: var(--font-medium);
+  color: var(--color-text-secondary);
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-md);
+  transition: background-color var(--transition-fast),
+              color var(--transition-fast);
+}
+
+.nav-link:hover {
+  background-color: var(--color-bg-hover);
+  color: var(--color-text-primary);
+}
+
+.nav-link.active {
+  background-color: var(--color-brand-light);
+  color: var(--color-text-brand);
+}
+
+/* 右侧操作区 */
+.navbar-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.navbar-bell {
+  background: none;
+  box-shadow: none;
+  font-size: var(--text-lg);
+  padding: var(--space-1);
+  cursor: pointer;
+  position: relative;
+}
+
+.navbar-bell:hover {
+  background-color: var(--color-bg-hover);
+  border-radius: var(--radius-md);
+}
+
+.navbar-user {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.navbar-email {
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+  max-width: 160px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.navbar-logout {
+  font-size: var(--text-xs);
+  padding: var(--space-1) var(--space-2);
+}
+
+/* ---- 响应式 ---- */
+
+/* 移动端：隐藏邮箱，导航链接缩小 */
+@media (max-width: 767px) {
+  .navbar-inner {
+    padding: 0 var(--space-3);
+  }
+
+  .navbar-links {
+    gap: 0;
+  }
+
+  .nav-link {
+    font-size: var(--text-xs);
+    padding: var(--space-1) var(--space-2);
+  }
+
+  .navbar-email {
+    display: none;
+  }
+}
+
+/* 平板端 */
+@media (min-width: 768px) and (max-width: 991px) {
+  .navbar-email {
+    max-width: 120px;
+  }
+}

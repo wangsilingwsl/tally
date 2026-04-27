@@ -1,0 +1,21 @@
+/* ============================================================
+ * 应用布局样式
+ * ============================================================ */
+
+.layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.layout-main {
+  flex: 1;
+  padding: var(--space-6) 0;
+}
+
+/* 移动端减少内边距 */
+@media (max-width: 767px) {
+  .layout-main {
+    padding: var(--space-4) 0;
+  }
+}
