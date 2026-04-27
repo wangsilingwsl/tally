@@ -1,0 +1,107 @@
+/* ============================================================
+ * 归物 · Tally — 全局设计主题变量
+ * 暖色调羊皮纸质感设计系统
+ * ============================================================ */
+
+:root {
+  /* ---- 品牌色 ---- */
+  --color-brand: #c96442;           /* 赤陶色，主要操作按钮 */
+  --color-brand-hover: #b5573a;     /* 品牌色悬停态 */
+  --color-brand-active: #a34d33;    /* 品牌色按下态 */
+  --color-brand-light: #f0d8cc;     /* 品牌色浅色背景 */
+
+  /* ---- 背景色 ---- */
+  --color-bg-page: #f5f4ed;         /* 羊皮纸色，页面背景 */
+  --color-bg-card: #faf9f5;         /* 象牙白，卡片背景 */
+  --color-bg-input: #ffffff;        /* 输入框背景 */
+  --color-bg-hover: #f0efe8;        /* 悬停态背景 */
+
+  /* ---- 暖色调中性色（带黄棕底色） ---- */
+  --color-gray-50: #faf9f5;
+  --color-gray-100: #f5f4ed;
+  --color-gray-200: #e8e6dc;
+  --color-gray-300: #d5d2c4;
+  --color-gray-400: #b8b4a4;
+  --color-gray-500: #9a9585;
+  --color-gray-600: #7d7868;
+  --color-gray-700: #5e5a4d;
+  --color-gray-800: #3f3c33;
+  --color-gray-900: #2a2822;
+
+  /* ---- 文字色 ---- */
+  --color-text-primary: #2a2822;    /* 主要文字 */
+  --color-text-secondary: #5e5a4d;  /* 次要文字 */
+  --color-text-tertiary: #9a9585;   /* 辅助文字 */
+  --color-text-inverse: #faf9f5;    /* 反色文字（用于深色背景） */
+  --color-text-brand: #c96442;      /* 品牌色文字 */
+
+  /* ---- 语义色 ---- */
+  --color-success: #5a8a5e;         /* 成功/保修中 */
+  --color-warning: #c49a3c;         /* 警告/即将到期 */
+  --color-danger: #c25b4a;          /* 危险/已过期 */
+  --color-info: #6b8fa3;            /* 信息提示 */
+
+  /* ---- 边框色 ---- */
+  --color-border: #e8e6dc;          /* 默认边框 */
+  --color-border-hover: #d5d2c4;    /* 悬停边框 */
+  --color-border-focus: #c96442;    /* 聚焦边框（品牌色） */
+
+  /* ---- 字体 ---- */
+  --font-title: 'Georgia', 'Times New Roman', serif;
+  --font-body: system-ui, -apple-system, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  --font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+
+  /* ---- 字号 ---- */
+  --text-xs: 0.75rem;     /* 12px */
+  --text-sm: 0.875rem;    /* 14px */
+  --text-base: 1rem;      /* 16px */
+  --text-lg: 1.125rem;    /* 18px */
+  --text-xl: 1.25rem;     /* 20px */
+  --text-2xl: 1.5rem;     /* 24px */
+  --text-3xl: 1.875rem;   /* 30px */
+
+  /* ---- 行高 ---- */
+  --leading-tight: 1.25;
+  --leading-normal: 1.5;
+  --leading-relaxed: 1.75;
+
+  /* ---- 字重 ---- */
+  --font-normal: 400;
+  --font-medium: 500;
+  --font-semibold: 600;
+  --font-bold: 700;
+
+  /* ---- 圆角 ---- */
+  --radius-sm: 6px;       /* 小元素圆角 */
+  --radius-md: 8px;       /* 按钮圆角 */
+  --radius-lg: 12px;      /* 输入框圆角 */
+  --radius-xl: 16px;      /* 卡片圆角 */
+  --radius-full: 9999px;  /* 圆形/胶囊 */
+
+  /* ---- 环形阴影（替代传统投影） ---- */
+  --shadow-ring: 0px 0px 0px 1px var(--color-border);
+  --shadow-ring-hover: 0px 0px 0px 1px var(--color-border-hover);
+  --shadow-ring-focus: 0px 0px 0px 2px var(--color-brand);
+  --shadow-ring-brand: 0px 0px 0px 1px var(--color-brand);
+
+  /* ---- 间距 ---- */
+  --space-1: 0.25rem;     /* 4px */
+  --space-2: 0.5rem;      /* 8px */
+  --space-3: 0.75rem;     /* 12px */
+  --space-4: 1rem;        /* 16px */
+  --space-5: 1.25rem;     /* 20px */
+  --space-6: 1.5rem;      /* 24px */
+  --space-8: 2rem;        /* 32px */
+  --space-10: 2.5rem;     /* 40px */
+  --space-12: 3rem;       /* 48px */
+
+  /* ---- 过渡动画 ---- */
+  --transition-fast: 150ms ease;
+  --transition-normal: 250ms ease;
+
+  /* ---- 响应式断点（仅作注释参考，实际使用 @media 查询） ----
+   * 移动端: < 768px
+   * 平板端: 768px - 991px
+   * 桌面端: >= 992px
+   * ---- */
+}
