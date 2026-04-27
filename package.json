@@ -1,0 +1,15 @@
+{
+  "name": "tally",
+  "version": "1.0.0",
+  "private": true,
+  "description": "归物 · Tally - 个人物品消费管理系统",
+  "workspaces": [
+    "packages/web",
+    "packages/server"
+  ],
+  "scripts": {
+    "dev:web": "npm run dev --workspace=packages/web",
+    "dev:server": "npm run dev --workspace=packages/server",
+    "dev": "npm run dev:web & npm run dev:server"
+  }
+}
