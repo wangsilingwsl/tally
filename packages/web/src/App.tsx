@@ -8,6 +8,7 @@ import ItemForm from './pages/ItemForm';
 import ItemList from './pages/ItemList';
 import ItemDetail from './pages/ItemDetail';
 import Dashboard from './pages/Dashboard';
+import Analytics from './pages/Analytics';
 
 /**
  * 占位页面组件，后续任务中替换为实际页面
@@ -68,7 +69,7 @@ export default function App() {
             <Route path="/items/new" element={<ItemForm />} />
             <Route path="/items/:id" element={<ItemDetail />} />
             <Route path="/items/:id/edit" element={<ItemForm />} />
-            <Route path="/analytics" element={<Placeholder title="消费统计" />} />
+            <Route path="/analytics" element={<Analytics />} />
             <Route path="/settings" element={<Placeholder title="设置" />} />
           </Route>
         </Route>
