@@ -27,7 +27,8 @@ npm-debug.log*
 # Prisma
 packages/server/prisma/*.db
 packages/server/prisma/migrations/
-packages/server/data/
+packages/server/prisma/data/
+*.db
 
 # 临时文件
 *.tmp
