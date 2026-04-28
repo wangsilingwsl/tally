@@ -28,10 +28,36 @@ const DEFAULT_CATEGORIES = [
   '其他',
 ];
 
+/** 防止重复初始化的模块级标记 */
+let seeded = false;
+
 /**
- * 初始化预置分类（仅在本地无任何分类时执行一次）
+ * 初始化预置分类（整个应用生命周期内只执行一次）
+ * 同时清理已存在的重复分类记录
  */
 async function seedDefaultCategories(): Promise<void> {
+  if (seeded) return;
+  seeded = true;
+
+  // 清理重复分类：按名称去重，保留最早创建的那条
+  const all = await db.categories.filter((c) => !c.isDeleted).toArray();
+  const seen = new Map<string, string>(); // name → id (最早的)
+  const duplicateIds: string[] = [];
+
+  // 按 createdAt 升序排列，保留最早的
+  all.sort((a, b) => a.createdAt.localeCompare(b.createdAt));
+  for (const cat of all) {
+    if (seen.has(cat.name)) {
+      duplicateIds.push(cat.id);
+    } else {
+      seen.set(cat.name, cat.id);
+    }
+  }
+  if (duplicateIds.length > 0) {
+    await db.categories.bulkDelete(duplicateIds);
+  }
+
+  // 如果已有分类（去重后），不再插入预置数据
   const count = await db.categories.count();
   if (count > 0) return;
 
