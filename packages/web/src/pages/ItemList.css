@@ -1,0 +1,93 @@
+/* ============================================================
+ * 物品列表页面样式
+ * ============================================================ */
+
+.item-list-page {
+  padding: var(--space-6) 0;
+}
+
+/* 页面头部：标题 + 新增按钮 */
+.item-list-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-6);
+}
+
+.item-list-header h2 {
+  color: var(--color-text-primary);
+}
+
+/* 筛选栏 */
+.item-list-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  margin-bottom: var(--space-6);
+}
+
+.item-list-filters input,
+.item-list-filters select {
+  width: auto;
+  min-width: 160px;
+  max-width: 280px;
+  font-size: var(--text-sm);
+  padding: var(--space-2) var(--space-3);
+}
+
+.item-list-filters select {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%239a9585' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  padding-right: var(--space-8);
+}
+
+/* 物品网格 */
+.item-list-grid {
+  display: grid;
+  gap: var(--space-4);
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 768px) {
+  .item-list-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 992px) {
+  .item-list-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* 空状态 */
+.item-list-empty {
+  text-align: center;
+  padding: var(--space-12) var(--space-4);
+  color: var(--color-text-tertiary);
+}
+
+.item-list-empty-icon {
+  font-size: 3rem;
+  margin-bottom: var(--space-3);
+}
+
+.item-list-empty p {
+  font-size: var(--text-base);
+  margin-bottom: var(--space-4);
+}
+
+/* 响应式：移动端筛选栏纵向排列 */
+@media (max-width: 767px) {
+  .item-list-filters {
+    flex-direction: column;
+  }
+
+  .item-list-filters input,
+  .item-list-filters select {
+    max-width: 100%;
+    width: 100%;
+  }
+}
