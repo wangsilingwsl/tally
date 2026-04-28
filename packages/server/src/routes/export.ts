@@ -1,5 +1,4 @@
 import { FastifyInstance } from 'fastify';
-import { Decimal } from '@prisma/client/runtime/library';
 import ExcelJS from 'exceljs';
 import PDFDocument from 'pdfkit';
 
@@ -22,8 +21,8 @@ const STATUS_MAP: Record<string, string> = {
   DISCARDED: '已丢弃',
 };
 
-/** Decimal 转 number */
-function toNumber(val: Decimal | null | undefined): number {
+/** 价格值转 number（兼容处理） */
+function toNumber(val: number | null | undefined): number {
   if (val == null) return 0;
   return Number(val);
 }
@@ -151,8 +150,8 @@ export default async function exportRoutes(fastify: FastifyInstance) {
 
       // 填充数据行
       for (const item of items) {
-        const price = toNumber(item.purchasePrice as unknown as Decimal);
-        const resaleRaw = item.resalePrice as unknown as Decimal | null;
+        const price = toNumber(item.purchasePrice);
+        const resaleRaw = item.resalePrice;
         const tagNames = item.itemTags.map((it) => it.tag.name).join(', ');
 
         worksheet.addRow({
@@ -299,8 +298,8 @@ function generatePDF(items: Awaited<ReturnType<typeof queryItems>>): Promise<Buf
       }
 
       const item = items[i];
-      const price = toNumber(item.purchasePrice as unknown as Decimal);
-      const resaleRaw = item.resalePrice as unknown as Decimal | null;
+      const price = toNumber(item.purchasePrice);
+      const resaleRaw = item.resalePrice;
       const dailyCost = calcDailyCost(price, item.purchaseDate);
 
       // 交替行背景色

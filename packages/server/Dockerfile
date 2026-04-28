@@ -2,7 +2,7 @@ FROM node:20-alpine
 
 WORKDIR /app
 
-# 先复制依赖文件和 Prisma Schema，利用 Docker 缓存层
+# 复制依赖文件和 Prisma Schema
 COPY package*.json ./
 COPY prisma ./prisma/
 
@@ -18,8 +18,8 @@ COPY . .
 # 编译 TypeScript
 RUN npm run build
 
-# 创建 uploads 目录（Docker 卷挂载点）
-RUN mkdir -p /app/uploads/originals /app/uploads/thumbnails
+# 创建数据和上传目录（Docker 卷挂载点）
+RUN mkdir -p /app/data /app/uploads/originals /app/uploads/thumbnails
 
 EXPOSE 3001
 

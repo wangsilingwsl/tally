@@ -1,5 +1,5 @@
 import { FastifyInstance } from 'fastify';
-import { Prisma, ItemStatus } from '@prisma/client';
+import { Prisma } from '@prisma/client';
 import {
   createItemSchema,
   updateItemSchema,
@@ -17,7 +17,7 @@ interface CreateItemBody {
   purchasePrice: number;
   purchaseChannel?: string;
   resalePrice?: number;
-  status: ItemStatus;
+  status: string;
   warrantyDate?: string;
   expiryDate?: string;
   note?: string;
@@ -34,7 +34,7 @@ interface UpdateItemBody {
   purchasePrice?: number;
   purchaseChannel?: string;
   resalePrice?: number | null;
-  status?: ItemStatus;
+  status?: string;
   warrantyDate?: string | null;
   expiryDate?: string | null;
   note?: string | null;
@@ -53,7 +53,7 @@ interface ListItemsQuery {
   limit?: number;
   search?: string;
   categoryId?: string;
-  status?: ItemStatus;
+  status?: string;
   tag?: string;
 }
 
@@ -129,7 +129,7 @@ export default async function itemRoutes(fastify: FastifyInstance) {
 
       // 按名称模糊搜索
       if (search) {
-        where.name = { contains: search, mode: 'insensitive' };
+        where.name = { contains: search };
       }
 
       // 按分类筛选
@@ -240,9 +240,9 @@ export default async function itemRoutes(fastify: FastifyInstance) {
           brand: data.brand,
           model: data.model,
           purchaseDate: new Date(data.purchaseDate),
-          purchasePrice: new Prisma.Decimal(data.purchasePrice),
+          purchasePrice: data.purchasePrice,
           purchaseChannel: data.purchaseChannel,
-          resalePrice: data.resalePrice != null ? new Prisma.Decimal(data.resalePrice) : null,
+          resalePrice: data.resalePrice ?? null,
           status: data.status,
           warrantyDate: data.warrantyDate ? new Date(data.warrantyDate) : null,
           expiryDate: data.expiryDate ? new Date(data.expiryDate) : null,
@@ -303,10 +303,10 @@ export default async function itemRoutes(fastify: FastifyInstance) {
       if (data.brand !== undefined) updateData.brand = data.brand;
       if (data.model !== undefined) updateData.model = data.model;
       if (data.purchaseDate !== undefined) updateData.purchaseDate = new Date(data.purchaseDate);
-      if (data.purchasePrice !== undefined) updateData.purchasePrice = new Prisma.Decimal(data.purchasePrice);
+      if (data.purchasePrice !== undefined) updateData.purchasePrice = data.purchasePrice;
       if (data.purchaseChannel !== undefined) updateData.purchaseChannel = data.purchaseChannel;
       if (data.resalePrice !== undefined) {
-        updateData.resalePrice = data.resalePrice != null ? new Prisma.Decimal(data.resalePrice) : null;
+        updateData.resalePrice = data.resalePrice ?? null;
       }
       if (data.status !== undefined) updateData.status = data.status;
       if (data.warrantyDate !== undefined) {

@@ -12,34 +12,17 @@ services:
     ports:
       - "${API_PORT:-3001}:3001"
     environment:
-      - DATABASE_URL=postgresql://${DB_USER:-tally}:${DB_PASSWORD:-tally123}@db:5432/${DB_NAME:-tally}
+      - DATABASE_URL=file:./data/tally.db
       - JWT_SECRET=${JWT_SECRET:-change-me-in-production}
       - SMTP_HOST=${SMTP_HOST:-}
       - SMTP_PORT=${SMTP_PORT:-465}
       - SMTP_USER=${SMTP_USER:-}
       - SMTP_PASS=${SMTP_PASS:-}
     volumes:
+      - data:/app/data
       - uploads:/app/uploads
-    depends_on:
-      db:
-        condition: service_healthy
-    restart: unless-stopped
-
-  db:
-    image: postgres:16-alpine
-    environment:
-      - POSTGRES_USER=${DB_USER:-tally}
-      - POSTGRES_PASSWORD=${DB_PASSWORD:-tally123}
-      - POSTGRES_DB=${DB_NAME:-tally}
-    volumes:
-      - pgdata:/var/lib/postgresql/data
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-tally}"]
-      interval: 5s
-      timeout: 3s
-      retries: 5
     restart: unless-stopped
 
 volumes:
-  pgdata:
+  data:
   uploads:

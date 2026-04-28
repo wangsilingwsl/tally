@@ -1,5 +1,4 @@
 import { FastifyInstance } from 'fastify';
-import { Prisma, ItemStatus } from '@prisma/client';
 
 /** 单条变更记录类型 */
 interface SyncChange {
@@ -120,12 +119,12 @@ async function handleItemChange(
   if (data.brand !== undefined) itemData.brand = data.brand || null;
   if (data.model !== undefined) itemData.model = data.model || null;
   if (data.purchaseDate !== undefined) itemData.purchaseDate = new Date(data.purchaseDate as string);
-  if (data.purchasePrice !== undefined) itemData.purchasePrice = new Prisma.Decimal(data.purchasePrice as number);
+  if (data.purchasePrice !== undefined) itemData.purchasePrice = data.purchasePrice as number;
   if (data.purchaseChannel !== undefined) itemData.purchaseChannel = data.purchaseChannel || null;
   if (data.resalePrice !== undefined) {
-    itemData.resalePrice = data.resalePrice != null ? new Prisma.Decimal(data.resalePrice as number) : null;
+    itemData.resalePrice = data.resalePrice != null ? data.resalePrice as number : null;
   }
-  if (data.status !== undefined) itemData.status = data.status as ItemStatus;
+  if (data.status !== undefined) itemData.status = data.status;
   if (data.warrantyDate !== undefined) {
     itemData.warrantyDate = data.warrantyDate ? new Date(data.warrantyDate as string) : null;
   }
@@ -161,8 +160,8 @@ async function handleItemChange(
       userId,
       name: itemData.name ?? '未命名物品',
       purchaseDate: itemData.purchaseDate ?? new Date(),
-      purchasePrice: itemData.purchasePrice ?? new Prisma.Decimal(0),
-      status: (itemData.status as ItemStatus) ?? 'IN_USE',
+      purchasePrice: itemData.purchasePrice ?? 0,
+      status: (itemData.status) ?? 'IN_USE',
       ...itemData,
       updatedAt: clientTime,
     };

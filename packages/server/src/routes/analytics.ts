@@ -1,6 +1,4 @@
 import { FastifyInstance } from 'fastify';
-import { Decimal } from '@prisma/client/runtime/library';
-import { ItemStatus } from '@prisma/client';
 
 /** 趋势查询参数类型 */
 interface TrendQuery {
@@ -42,9 +40,9 @@ interface SummaryData {
 }
 
 /**
- * 将 Decimal 转为 number
+ * 将价格值转为 number（兼容处理）
  */
-function toNumber(val: Decimal | null | undefined): number {
+function toNumber(val: number | null | undefined): number {
   if (val == null) return 0;
   return Number(val);
 }
@@ -106,7 +104,7 @@ export default async function analyticsRoutes(fastify: FastifyInstance) {
       const trendMap = new Map<string, number>();
       for (const item of items) {
         const key = getPeriodKey(item.purchaseDate, period);
-        const price = toNumber(item.purchasePrice as unknown as Decimal);
+        const price = toNumber(item.purchasePrice);
         trendMap.set(key, (trendMap.get(key) || 0) + price);
       }
 
@@ -147,7 +145,7 @@ export default async function analyticsRoutes(fastify: FastifyInstance) {
       let totalAmount = 0;
 
       for (const item of items) {
-        const price = toNumber(item.purchasePrice as unknown as Decimal);
+        const price = toNumber(item.purchasePrice);
         totalAmount += price;
 
         const catId = item.categoryId;
@@ -197,8 +195,8 @@ export default async function analyticsRoutes(fastify: FastifyInstance) {
       });
 
       const depreciation: DepreciationItem[] = items.map((item) => {
-        const purchasePrice = toNumber(item.purchasePrice as unknown as Decimal);
-        const resaleRaw = item.resalePrice as unknown as Decimal | null;
+        const purchasePrice = toNumber(item.purchasePrice);
+        const resaleRaw = item.resalePrice;
         const hasEstimate = resaleRaw != null;
 
         if (!hasEstimate) {
@@ -261,18 +259,18 @@ export default async function analyticsRoutes(fastify: FastifyInstance) {
 
       // 初始化状态计数
       const statusCounts: Record<string, number> = {
-        [ItemStatus.IN_USE]: 0,
-        [ItemStatus.IDLE]: 0,
-        [ItemStatus.SOLD]: 0,
-        [ItemStatus.DISCARDED]: 0,
+        IN_USE: 0,
+        IDLE: 0,
+        SOLD: 0,
+        DISCARDED: 0,
       };
 
       for (const item of items) {
-        const price = toNumber(item.purchasePrice as unknown as Decimal);
+        const price = toNumber(item.purchasePrice);
         totalAssets += price;
 
         // 仅累加已填写二手回收价格的物品
-        const resaleRaw = item.resalePrice as unknown as Decimal | null;
+        const resaleRaw = item.resalePrice;
         if (resaleRaw != null) {
           totalResaleValue += toNumber(resaleRaw);
         }

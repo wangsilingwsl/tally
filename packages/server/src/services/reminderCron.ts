@@ -1,6 +1,11 @@
 import cron from 'node-cron';
 import nodemailer from 'nodemailer';
-import { PrismaClient, ReminderType, ReminderPriority } from '@prisma/client';
+import { PrismaClient } from '@prisma/client';
+
+/** 提醒类型 */
+type ReminderType = 'WARRANTY' | 'EXPIRY';
+/** 提醒优先级 */
+type ReminderPriority = 'NORMAL' | 'HIGH';
 
 /**
  * 创建 SMTP 邮件传输器
@@ -184,7 +189,7 @@ async function sendReminderEmails(prisma: PrismaClient) {
 
     // 构建邮件内容
     const reminderLines = user.reminders.map((r) => {
-      const typeLabel = getReminderTypeLabel(r.type);
+      const typeLabel = getReminderTypeLabel(r.type as ReminderType);
       const priorityLabel = r.priority === 'HIGH' ? '【紧急】' : '';
       const dueDateStr = r.dueDate.toISOString().split('T')[0];
       return `${priorityLabel}${r.itemName} - ${typeLabel}（${dueDateStr}）`;

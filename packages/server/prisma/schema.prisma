@@ -3,7 +3,7 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "sqlite"
   url      = env("DATABASE_URL")
 }
 
@@ -25,15 +25,15 @@ model User {
 
 // 物品表
 model Item {
-  id              String     @id @default(uuid())
+  id              String   @id @default(uuid())
   name            String                          // 名称（必填）
   brand           String?                         // 品牌
   model           String?                         // 型号
   purchaseDate    DateTime                        // 购买日期（必填）
-  purchasePrice   Decimal    @db.Decimal(12, 2)   // 购买价格（必填）
+  purchasePrice   Float                           // 购买价格（必填）
   purchaseChannel String?                         // 购买渠道
-  resalePrice     Decimal?   @db.Decimal(12, 2)   // 预估二手回收价格
-  status          ItemStatus @default(IN_USE)     // 物品状态
+  resalePrice     Float?                          // 预估二手回收价格
+  status          String   @default("IN_USE")     // 物品状态
   warrantyDate    DateTime?                       // 保修到期日期
   expiryDate      DateTime?                       // 有效期到期日期
   note            String?                         // 备注
@@ -54,13 +54,6 @@ model Item {
   @@index([userId, status])
   @@index([userId, categoryId])
   @@index([userId, updatedAt])
-}
-
-enum ItemStatus {
-  IN_USE      // 使用中
-  IDLE        // 闲置
-  SOLD        // 已出售
-  DISCARDED   // 已丢弃
 }
 
 // 分类表
@@ -115,28 +108,18 @@ model Image {
 
 // 提醒表
 model Reminder {
-  id        String       @id @default(uuid())
+  id        String   @id @default(uuid())
   userId    String
-  user      User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   itemId    String                              // 关联物品 ID
   itemName  String                              // 冗余物品名称（便于展示）
-  type      ReminderType                        // 提醒类型
-  priority  ReminderPriority @default(NORMAL)   // 优先级
+  type      String                              // 提醒类型: WARRANTY / EXPIRY
+  priority  String   @default("NORMAL")         // 优先级: NORMAL / HIGH
   dueDate   DateTime                            // 到期日期
-  isRead    Boolean      @default(false)
-  emailSent Boolean      @default(false)        // 邮件是否已发送
-  createdAt DateTime     @default(now())
+  isRead    Boolean  @default(false)
+  emailSent Boolean  @default(false)            // 邮件是否已发送
+  createdAt DateTime @default(now())
 
   @@index([userId, isRead])
   @@index([userId, dueDate])
-}
-
-enum ReminderType {
-  WARRANTY    // 保修到期
-  EXPIRY      // 有效期到期
-}
-
-enum ReminderPriority {
-  NORMAL      // 普通（30天内到期）
-  HIGH        // 高优先级（7天内到期）
 }
