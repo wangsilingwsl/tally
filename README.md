@@ -71,18 +71,18 @@ npm install
 
 # 配置环境变量
 cp .env.example packages/server/.env
-# 编辑 packages/server/.env，填写数据库连接等配置
 
-# 初始化数据库
-cd packages/server
-npx prisma migrate dev
-cd ../..
+# 启动数据库（Docker 容器，无需本地安装 PostgreSQL）
+npm run db:start
+
+# 初始化数据库表
+npm run db:migrate
 
 # 启动前后端
 npm run dev
 ```
 
-前端默认运行在 `http://localhost:5173`，后端运行在 `http://localhost:3001`。
+前端运行在 `http://localhost:3000`，后端运行在 `http://localhost:3001`。
 
 ### Docker 部署
 
@@ -100,6 +100,9 @@ docker compose up -d --build
 ## 开发脚本
 
 ```bash
+npm run db:start     # 启动数据库（Docker 容器）
+npm run db:stop      # 停止数据库
+npm run db:migrate   # 执行数据库迁移
 npm run dev          # 同时启动前后端
 npm run dev:web      # 仅启动前端
 npm run dev:server   # 仅启动后端

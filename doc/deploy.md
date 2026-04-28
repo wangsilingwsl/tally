@@ -5,7 +5,7 @@
 ### 1. 环境要求
 
 - Node.js >= 18
-- PostgreSQL 16（本地安装或 Docker 运行均可）
+- Docker（用于运行 PostgreSQL，无需本地安装数据库）
 - npm >= 9
 
 ### 2. 安装依赖
@@ -37,29 +37,55 @@ cp .env.example packages/server/.env
 | `SMTP_USER` | 邮件账号（可选） | `your-email@example.com` |
 | `SMTP_PASS` | 邮件密码（可选） | 邮箱授权码 |
 
-### 4. 初始化数据库
+使用默认的 `.env.example` 配置即可直接运行，无需修改。
+
+### 4. 启动数据库
+
+无需本地安装 PostgreSQL，通过 Docker 一键启动：
 
 ```bash
-cd packages/server
-npx prisma migrate dev
+npm run db:start
 ```
 
-### 5. 启动服务
+该命令会创建并启动一个名为 `tally-db` 的 PostgreSQL 容器（端口 5432）。再次执行会自动复用已有容器。
 
-项目根目录提供三个开发脚本：
+停止数据库：
 
 ```bash
-# 仅启动前端（默认 http://localhost:5173）
-npm run dev:web
+npm run db:stop
+```
 
-# 仅启动后端（默认 http://localhost:3001）
-npm run dev:server
+### 5. 初始化数据库
 
+首次使用或 Schema 变更后执行迁移：
+
+```bash
+npm run db:migrate
+```
+
+### 6. 启动服务
+
+```bash
 # 同时启动前端和后端
 npm run dev
+
+# 或分别启动
+npm run dev:web      # 前端（http://localhost:3000）
+npm run dev:server   # 后端（http://localhost:3001）
 ```
 
 前端使用 Vite 开发服务器，后端使用 tsx watch 热重载。
+
+### 日常开发流程
+
+每次开发只需三步：
+
+```bash
+npm run db:start     # 启动数据库
+npm run dev          # 启动前后端
+# 开发完成后
+npm run db:stop      # 停止数据库（可选）
+```
 
 ---
 
