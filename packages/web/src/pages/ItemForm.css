@@ -7,7 +7,8 @@
 }
 
 .item-form-header {
-  margin-bottom: var(--space-6);
+  max-width: 640px;
+  margin: 0 auto var(--space-6);
 }
 
 .item-form-header h2 {
@@ -17,6 +18,7 @@
 /* 表单卡片 */
 .item-form-card {
   max-width: 640px;
+  margin: 0 auto;
 }
 
 .item-form {
