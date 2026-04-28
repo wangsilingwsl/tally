@@ -7,6 +7,7 @@ import Register from './pages/Register';
 import ItemForm from './pages/ItemForm';
 import ItemList from './pages/ItemList';
 import ItemDetail from './pages/ItemDetail';
+import Dashboard from './pages/Dashboard';
 
 /**
  * 占位页面组件，后续任务中替换为实际页面
@@ -62,7 +63,7 @@ export default function App() {
         {/* 需认证的路由 */}
         <Route element={<ProtectedRoute />}>
           <Route element={<Layout />}>
-            <Route path="/" element={<Placeholder title="资产总览" />} />
+            <Route path="/" element={<Dashboard />} />
             <Route path="/items" element={<ItemList />} />
             <Route path="/items/new" element={<ItemForm />} />
             <Route path="/items/:id" element={<ItemDetail />} />
