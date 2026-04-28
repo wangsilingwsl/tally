@@ -2,6 +2,7 @@ import { Outlet } from 'react-router';
 import { useEffect } from 'react';
 import { useAuthStore } from '../stores/authStore';
 import { request } from '../utils/api';
+import { scanAndGenerateReminders } from '../utils/reminder';
 import Navbar from './Navbar';
 import './Layout.css';
 
@@ -25,6 +26,13 @@ export default function Layout() {
   const user = useAuthStore((s) => s.user);
   const setAuth = useAuthStore((s) => s.setAuth);
   const logout = useAuthStore((s) => s.logout);
+
+  // 应用加载时扫描提醒（离线也能工作）
+  useEffect(() => {
+    scanAndGenerateReminders().catch(() => {
+      // 扫描失败不影响正常使用
+    });
+  }, []);
 
   // 登录后获取用户信息（刷新页面时从 Token 恢复）
   useEffect(() => {
