@@ -9,6 +9,7 @@ import categoryRoutes from './routes/categories.js';
 import imageRoutes from './routes/images.js';
 import reminderRoutes from './routes/reminders.js';
 import analyticsRoutes from './routes/analytics.js';
+import exportRoutes from './routes/export.js';
 import { startReminderCron } from './services/reminderCron.js';
 
 /**
@@ -63,6 +64,9 @@ export async function buildApp() {
 
   // 注册统计分析路由
   await app.register(analyticsRoutes);
+
+  // 注册数据导出路由
+  await app.register(exportRoutes);
 
   // 全局错误处理器：统一错误响应格式
   app.setErrorHandler((error: FastifyError, _request: FastifyRequest, reply: FastifyReply) => {
