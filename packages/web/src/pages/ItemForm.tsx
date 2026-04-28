@@ -4,6 +4,8 @@ import { db, type ItemStatus } from '../db/index';
 import { validateItemForm, isValid, type ItemFormData } from '../utils/validation';
 import CategoryPicker from '../components/CategoryPicker';
 import TagInput from '../components/TagInput';
+import ImageUploader from '../components/ImageUploader';
+import ImageGallery from '../components/ImageGallery';
 import './ItemForm.css';
 
 /** 物品状态选项 */
@@ -369,6 +371,15 @@ export default function ItemForm() {
             </button>
           </div>
         </form>
+
+        {/* 编辑模式：图片上传与画廊 */}
+        {isEdit && id && (
+          <div className="item-form-images">
+            <h3>物品图片</h3>
+            <ImageUploader itemId={id} />
+            <ImageGallery itemId={id} />
+          </div>
+        )}
       </div>
     </div>
   );

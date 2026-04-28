@@ -95,3 +95,18 @@
 .item-form textarea {
   min-height: 100px;
 }
+
+/* 编辑模式图片区域 */
+.item-form-images {
+  margin-top: var(--space-6);
+  padding-top: var(--space-6);
+  border-top: 1px solid var(--color-border);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.item-form-images h3 {
+  font-size: var(--text-lg);
+  color: var(--color-text-primary);
+}

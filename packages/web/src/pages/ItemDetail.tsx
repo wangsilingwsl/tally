@@ -4,6 +4,7 @@ import { db } from '../db/index';
 import { calculateDailyCost } from '../utils/dailyCost';
 import StatusBadge from '../components/StatusBadge';
 import ConfirmDialog from '../components/ConfirmDialog';
+import ImageGallery from '../components/ImageGallery';
 import { useState, useEffect } from 'react';
 import './ItemDetail.css';
 
@@ -156,6 +157,11 @@ export default function ItemDetail() {
             </div>
           )}
         </div>
+      </div>
+
+      {/* 图片画廊 */}
+      <div className="item-detail-gallery">
+        <ImageGallery itemId={id!} />
       </div>
 
       {/* 详细信息 */}

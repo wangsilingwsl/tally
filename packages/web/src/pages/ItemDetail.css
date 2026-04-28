@@ -194,3 +194,8 @@
     gap: var(--space-4);
   }
 }
+
+/* 图片画廊区域 */
+.item-detail-gallery {
+  margin-bottom: var(--space-4);
+}

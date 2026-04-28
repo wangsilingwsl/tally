@@ -1,0 +1,122 @@
+/* ============================================================
+ * 图片上传组件样式
+ * ============================================================ */
+
+.image-uploader {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+/* 拖拽上传区域 */
+.image-uploader-dropzone {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 120px;
+  border: 2px dashed var(--color-border);
+  border-radius: var(--radius-xl);
+  background-color: var(--color-bg-card);
+  cursor: pointer;
+  transition: border-color var(--transition-fast),
+              background-color var(--transition-fast);
+  padding: var(--space-4);
+}
+
+.image-uploader-dropzone:hover {
+  border-color: var(--color-border-hover);
+  background-color: var(--color-bg-hover);
+}
+
+.image-uploader-dropzone.drag-over {
+  border-color: var(--color-brand);
+  background-color: var(--color-brand-light);
+}
+
+.image-uploader-dropzone.uploading {
+  cursor: wait;
+  opacity: 0.7;
+}
+
+/* 隐藏原生 file input */
+.image-uploader-input {
+  display: none;
+}
+
+/* 占位提示 */
+.image-uploader-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+  text-align: center;
+}
+
+.image-uploader-icon {
+  font-size: var(--text-2xl);
+}
+
+.image-uploader-text {
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+  font-weight: var(--font-medium);
+}
+
+.image-uploader-hint {
+  font-size: var(--text-xs);
+  color: var(--color-text-tertiary);
+}
+
+/* 上传中状态 */
+.image-uploader-status {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+}
+
+.image-uploader-spinner {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: 2px solid var(--color-border);
+  border-top-color: var(--color-brand);
+  border-radius: 50%;
+  animation: uploader-spin 0.6s linear infinite;
+}
+
+@keyframes uploader-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* 上传成功预览 */
+.image-uploader-preview {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.image-uploader-preview img {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: var(--radius-md);
+}
+
+.image-uploader-success {
+  font-size: var(--text-sm);
+  color: var(--color-success);
+  font-weight: var(--font-medium);
+}
+
+/* 错误提示 */
+.image-uploader-error {
+  font-size: var(--text-xs);
+  color: var(--color-danger);
+  line-height: var(--leading-normal);
+  padding: var(--space-2) var(--space-3);
+  background-color: #f5e0dc;
+  border-radius: var(--radius-md);
+}
