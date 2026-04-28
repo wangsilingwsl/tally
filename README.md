@@ -60,26 +60,14 @@
 ### 环境要求
 
 - Node.js >= 18
-- PostgreSQL 16
+- Docker（用于运行 PostgreSQL，无需本地安装）
 - npm >= 9
 
 ### 安装与启动
 
 ```bash
-# 安装依赖
-npm install
-
-# 配置环境变量
-cp .env.example packages/server/.env
-
-# 启动数据库（Docker 容器，无需本地安装 PostgreSQL）
-npm run db:start
-
-# 初始化数据库表
-npm run db:migrate
-
-# 启动前后端
-npm run dev
+npm install          # 安装依赖
+npm start            # 一键启动（数据库 + 迁移 + 前后端）
 ```
 
 前端运行在 `http://localhost:3000`，后端运行在 `http://localhost:3001`。
@@ -100,12 +88,13 @@ docker compose up -d --build
 ## 开发脚本
 
 ```bash
-npm run db:start     # 启动数据库（Docker 容器）
-npm run db:stop      # 停止数据库
-npm run db:migrate   # 执行数据库迁移
-npm run dev          # 同时启动前后端
+npm start            # 一键启动全部服务
+npm run dev          # 仅启动前后端（需数据库已运行）
 npm run dev:web      # 仅启动前端
 npm run dev:server   # 仅启动后端
+npm run db:start     # 启动数据库
+npm run db:stop      # 停止数据库
+npm run db:migrate   # 执行数据库迁移
 ```
 
 ## 设计风格

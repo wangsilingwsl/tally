@@ -8,11 +8,12 @@
     "packages/server"
   ],
   "scripts": {
-    "db:start": "docker run -d --name tally-db -e POSTGRES_USER=tally -e POSTGRES_PASSWORD=tally123 -e POSTGRES_DB=tally -p 5432:5432 postgres:16-alpine || docker start tally-db",
-    "db:stop": "docker stop tally-db",
-    "db:migrate": "npm run migrate --workspace=packages/server",
+    "start": "bash scripts/dev.sh",
+    "dev": "npm run dev:web & npm run dev:server",
     "dev:web": "npm run dev --workspace=packages/web",
     "dev:server": "npm run dev --workspace=packages/server",
-    "dev": "npm run dev:web & npm run dev:server"
+    "db:start": "docker run -d --name tally-db -e POSTGRES_USER=tally -e POSTGRES_PASSWORD=tally123 -e POSTGRES_DB=tally -p 5432:5432 postgres:16-alpine || docker start tally-db",
+    "db:stop": "docker stop tally-db",
+    "db:migrate": "npm run migrate --workspace=packages/server"
   }
 }

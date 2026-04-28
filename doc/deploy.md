@@ -8,84 +8,56 @@
 - Docker（用于运行 PostgreSQL，无需本地安装数据库）
 - npm >= 9
 
-### 2. 安装依赖
+### 2. 一键启动
 
-在项目根目录执行：
-
-```bash
-npm install
-```
-
-会自动安装 `packages/web` 和 `packages/server` 两个子包的依赖。
-
-### 3. 配置环境变量
-
-复制环境变量模板并修改：
+首次使用只需两步：
 
 ```bash
-cp .env.example packages/server/.env
+npm install          # 安装依赖
+npm start            # 启动全部服务（数据库 + 迁移 + 前后端）
 ```
 
-编辑 `packages/server/.env`，填写实际配置：
+`npm start` 会自动完成以下操作：
+1. 启动 PostgreSQL Docker 容器
+2. 等待数据库就绪
+3. 生成 `.env` 配置文件（首次自动生成，无需手动配置）
+4. 执行数据库迁移
+5. 启动前端（http://localhost:3000）和后端（http://localhost:3001）
 
-| 变量 | 说明 | 示例 |
-|------|------|------|
-| `DATABASE_URL` | PostgreSQL 连接地址 | `postgresql://tally:tally123@localhost:5432/tally` |
-| `JWT_SECRET` | JWT 签名密钥 | 任意随机字符串 |
-| `SMTP_HOST` | 邮件服务器地址（可选） | `smtp.example.com` |
-| `SMTP_PORT` | 邮件服务器端口（可选） | `465` |
-| `SMTP_USER` | 邮件账号（可选） | `your-email@example.com` |
-| `SMTP_PASS` | 邮件密码（可选） | 邮箱授权码 |
+之后每次开发，直接 `npm start` 即可。
 
-使用默认的 `.env.example` 配置即可直接运行，无需修改。
+### 3. 停止服务
 
-### 4. 启动数据库
-
-无需本地安装 PostgreSQL，通过 Docker 一键启动：
-
-```bash
-npm run db:start
-```
-
-该命令会创建并启动一个名为 `tally-db` 的 PostgreSQL 容器（端口 5432）。再次执行会自动复用已有容器。
-
-停止数据库：
+按 `Ctrl+C` 停止前后端，然后停止数据库：
 
 ```bash
 npm run db:stop
 ```
 
-### 5. 初始化数据库
+### 4. 单独启动（可选）
 
-首次使用或 Schema 变更后执行迁移：
-
-```bash
-npm run db:migrate
-```
-
-### 6. 启动服务
+如果只需要启动部分服务：
 
 ```bash
-# 同时启动前端和后端
-npm run dev
-
-# 或分别启动
-npm run dev:web      # 前端（http://localhost:3000）
-npm run dev:server   # 后端（http://localhost:3001）
+npm run db:start     # 仅启动数据库
+npm run dev          # 仅启动前后端（需数据库已运行）
+npm run dev:web      # 仅启动前端
+npm run dev:server   # 仅启动后端
+npm run db:migrate   # 仅执行数据库迁移
 ```
 
-前端使用 Vite 开发服务器，后端使用 tsx watch 热重载。
+### 5. 环境变量
 
-### 日常开发流程
+配置文件位于 `packages/server/.env`，首次启动时自动生成。如需自定义：
 
-每次开发只需三步：
-
-```bash
-npm run db:start     # 启动数据库
-npm run dev          # 启动前后端
-# 开发完成后
-npm run db:stop      # 停止数据库（可选）
-```
+| 变量 | 说明 | 默认值 |
+|------|------|--------|
+| `DATABASE_URL` | PostgreSQL 连接地址 | `postgresql://tally:tally123@localhost:5432/tally` |
+| `JWT_SECRET` | JWT 签名密钥 | `dev-secret-key-change-in-production` |
+| `SMTP_HOST` | 邮件服务器地址 | 空（不发送邮件） |
+| `SMTP_PORT` | 邮件服务器端口 | `465` |
+| `SMTP_USER` | 邮件账号 | 空 |
+| `SMTP_PASS` | 邮件密码 | 空 |
 
 ---
 
