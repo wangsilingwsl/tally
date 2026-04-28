@@ -4,6 +4,7 @@ import prismaPlugin from './plugins/prisma.js';
 import authPlugin from './plugins/auth.js';
 import authRoutes from './routes/auth.js';
 import itemRoutes from './routes/items.js';
+import categoryRoutes from './routes/categories.js';
 
 /**
  * 统一错误响应格式
@@ -40,6 +41,9 @@ export async function buildApp() {
 
   // 注册物品管理路由
   await app.register(itemRoutes);
+
+  // 注册分类管理路由
+  await app.register(categoryRoutes);
 
   // 全局错误处理器：统一错误响应格式
   app.setErrorHandler((error: FastifyError, _request: FastifyRequest, reply: FastifyReply) => {
