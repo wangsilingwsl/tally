@@ -1,0 +1,151 @@
+/* ============================================================
+ * 分类选择器样式
+ * 支持选择已有分类、新建分类、编辑/删除分类
+ * ============================================================ */
+
+.category-picker {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+/* 选择器行：下拉框 + 管理按钮 */
+.category-picker-row {
+  display: flex;
+  gap: var(--space-2);
+  align-items: center;
+}
+
+.category-picker-row select {
+  flex: 1;
+}
+
+/* 管理按钮（齿轮图标） */
+.category-picker-manage-btn {
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--text-base);
+  background-color: var(--color-bg-card);
+  box-shadow: var(--shadow-ring);
+  border-radius: var(--radius-lg);
+  cursor: pointer;
+  transition: background-color var(--transition-fast);
+}
+
+.category-picker-manage-btn:hover {
+  background-color: var(--color-bg-hover);
+}
+
+/* 新建分类输入行 */
+.category-picker-create {
+  display: flex;
+  gap: var(--space-2);
+  align-items: center;
+}
+
+.category-picker-create input {
+  flex: 1;
+  font-size: var(--text-sm);
+  padding: var(--space-2) var(--space-3);
+}
+
+.category-picker-create button {
+  flex-shrink: 0;
+  padding: var(--space-2) var(--space-3);
+  font-size: var(--text-sm);
+}
+
+/* 错误提示 */
+.category-picker-error {
+  font-size: var(--text-xs);
+  color: var(--color-danger);
+}
+
+/* 分类管理面板 */
+.category-manage-panel {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-3);
+  background-color: var(--color-bg-card);
+}
+
+.category-manage-panel-title {
+  font-size: var(--text-sm);
+  font-weight: var(--font-medium);
+  color: var(--color-text-secondary);
+  margin-bottom: var(--space-2);
+}
+
+.category-manage-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.category-manage-empty {
+  font-size: var(--text-xs);
+  color: var(--color-text-tertiary);
+  padding: var(--space-2) 0;
+}
+
+/* 分类管理项 */
+.category-manage-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-1) 0;
+}
+
+.category-manage-item-name {
+  flex: 1;
+  font-size: var(--text-sm);
+  color: var(--color-text-primary);
+}
+
+/* 编辑态输入框 */
+.category-manage-item-edit {
+  flex: 1;
+}
+
+.category-manage-item-edit input {
+  font-size: var(--text-sm);
+  padding: var(--space-1) var(--space-2);
+}
+
+/* 操作按钮 */
+.category-manage-item-actions {
+  display: flex;
+  gap: var(--space-1);
+  flex-shrink: 0;
+}
+
+.category-manage-action-btn {
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--text-sm);
+  background: none;
+  border: none;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  color: var(--color-text-tertiary);
+  transition: color var(--transition-fast), background-color var(--transition-fast);
+}
+
+.category-manage-action-btn:hover {
+  color: var(--color-text-primary);
+  background-color: var(--color-bg-hover);
+}
+
+.category-manage-action-btn.danger:hover {
+  color: var(--color-danger);
+  background-color: #f5e0dc;
+}

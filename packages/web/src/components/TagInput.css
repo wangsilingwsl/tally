@@ -1,0 +1,108 @@
+/* ============================================================
+ * 标签输入组件样式
+ * 支持标签展示、输入、自动补全
+ * ============================================================ */
+
+.tag-input {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+/* 已选标签列表 */
+.tag-input-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1);
+}
+
+/* 标签芯片 */
+.tag-input-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  font-size: var(--text-xs);
+  font-weight: var(--font-medium);
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-full);
+  background-color: var(--color-brand-light);
+  color: var(--color-text-brand);
+  line-height: 1.4;
+}
+
+/* 标签删除按钮 */
+.tag-input-chip-remove {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  padding: 0;
+  border: none;
+  background: none;
+  font-size: 12px;
+  line-height: 1;
+  color: var(--color-text-brand);
+  cursor: pointer;
+  border-radius: var(--radius-full);
+  transition: background-color var(--transition-fast);
+}
+
+.tag-input-chip-remove:hover {
+  background-color: rgba(201, 100, 66, 0.2);
+}
+
+/* 输入区域容器（相对定位，用于下拉建议） */
+.tag-input-field {
+  position: relative;
+}
+
+.tag-input-field input {
+  font-size: var(--text-sm);
+  padding: var(--space-2) var(--space-3);
+}
+
+/* 自动补全建议列表 */
+.tag-input-suggestions {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  z-index: 10;
+  margin-top: var(--space-1);
+  background-color: var(--color-bg-card);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-ring);
+  max-height: 160px;
+  overflow-y: auto;
+}
+
+.tag-input-suggestion {
+  padding: var(--space-2) var(--space-3);
+  font-size: var(--text-sm);
+  color: var(--color-text-primary);
+  cursor: pointer;
+  transition: background-color var(--transition-fast);
+}
+
+.tag-input-suggestion:hover {
+  background-color: var(--color-bg-hover);
+}
+
+.tag-input-suggestion:first-child {
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+}
+
+.tag-input-suggestion:last-child {
+  border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+}
+
+.tag-input-suggestion:only-child {
+  border-radius: var(--radius-lg);
+}
+
+/* 输入提示文字 */
+.tag-input-hint {
+  font-size: var(--text-xs);
+  color: var(--color-text-tertiary);
+}

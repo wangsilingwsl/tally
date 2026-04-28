@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { filterItems, type FilterCriteria } from './filter';
+import { filterItems } from './filter';
 import type { LocalItem } from '../db/index';
 
 /** 创建测试用物品 */

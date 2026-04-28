@@ -23,6 +23,7 @@ export default function ItemList() {
   const [search, setSearch] = useState('');
   const [categoryId, setCategoryId] = useState('');
   const [status, setStatus] = useState<'' | ItemStatus>('');
+  const [tagFilter, setTagFilter] = useState('');
 
   // 响应式查询所有未删除物品
   const allItems = useLiveQuery(
@@ -36,12 +37,18 @@ export default function ItemList() {
     [],
   );
 
+  // 提取所有唯一标签用于筛选
+  const allTags = allItems
+    ? Array.from(new Set(allItems.flatMap((item) => item.tags))).sort()
+    : [];
+
   // 应用筛选条件
   const filteredItems = allItems
     ? filterItems(allItems, {
         search: search || undefined,
         categoryId: categoryId || undefined,
         status: (status as ItemStatus) || undefined,
+        tag: tagFilter || undefined,
       })
     : [];
 
@@ -84,6 +91,19 @@ export default function ItemList() {
             </option>
           ))}
         </select>
+        {allTags.length > 0 && (
+          <select
+            value={tagFilter}
+            onChange={(e) => setTagFilter(e.target.value)}
+          >
+            <option value="">全部标签</option>
+            {allTags.map((tag) => (
+              <option key={tag} value={tag}>
+                {tag}
+              </option>
+            ))}
+          </select>
+        )}
       </div>
 
       {/* 物品网格 */}

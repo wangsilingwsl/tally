@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router';
 import { db, type ItemStatus } from '../db/index';
 import { validateItemForm, isValid, type ItemFormData } from '../utils/validation';
+import CategoryPicker from '../components/CategoryPicker';
+import TagInput from '../components/TagInput';
 import './ItemForm.css';
 
 /** 物品状态选项 */
@@ -40,6 +42,8 @@ export default function ItemForm() {
   const isEdit = Boolean(id);
 
   const [formData, setFormData] = useState<ItemFormData>(getInitialFormData);
+  const [categoryId, setCategoryId] = useState<string | undefined>(undefined);
+  const [tags, setTags] = useState<string[]>([]);
   const [errors, setErrors] = useState<Record<string, string | undefined>>({});
   const [submitting, setSubmitting] = useState(false);
   const [loading, setLoading] = useState(isEdit);
@@ -68,6 +72,8 @@ export default function ItemForm() {
           expiryDate: item.expiryDate ?? '',
           note: item.note ?? '',
         });
+        setCategoryId(item.categoryId);
+        setTags(item.tags ?? []);
       } catch {
         navigate('/items', { replace: true });
       } finally {
@@ -122,6 +128,8 @@ export default function ItemForm() {
           warrantyDate: formData.warrantyDate || undefined,
           expiryDate: formData.expiryDate || undefined,
           note: formData.note.trim() || undefined,
+          categoryId,
+          tags,
           updatedAt: now,
           syncStatus: 'pending',
         });
@@ -142,8 +150,8 @@ export default function ItemForm() {
           warrantyDate: formData.warrantyDate || undefined,
           expiryDate: formData.expiryDate || undefined,
           note: formData.note.trim() || undefined,
-          categoryId: undefined,
-          tags: [],
+          categoryId,
+          tags,
           isDeleted: false,
           createdAt: now,
           updatedAt: now,
@@ -301,6 +309,18 @@ export default function ItemForm() {
               ))}
             </select>
             {errors.status && <span className="field-error">{errors.status}</span>}
+          </div>
+
+          {/* 分类 */}
+          <div className="form-field">
+            <label>分类</label>
+            <CategoryPicker value={categoryId} onChange={setCategoryId} />
+          </div>
+
+          {/* 标签 */}
+          <div className="form-field">
+            <label>标签</label>
+            <TagInput tags={tags} onChange={setTags} />
           </div>
 
           {/* 保修到期日期 + 有效期到期日期 */}
