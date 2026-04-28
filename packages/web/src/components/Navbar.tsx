@@ -32,9 +32,6 @@ export default function Navbar() {
         {/* 主导航链接 */}
         <div className="navbar-links">
           <NavLink to="/" end className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'}>
-            总览
-          </NavLink>
-          <NavLink to="/items" className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'}>
             物品
           </NavLink>
           <NavLink to="/analytics" className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'}>

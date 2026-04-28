@@ -80,7 +80,7 @@ export default function ItemDetail() {
     // item === undefined 表示查询尚未完成，不做处理
     // item === null 表示查询完成但未找到
     if (item === null || (item && item.isDeleted)) {
-      navigate('/items', { replace: true });
+      navigate('/', { replace: true });
     }
   }, [item, navigate]);
 
@@ -110,7 +110,7 @@ export default function ItemDetail() {
       syncStatus: 'pending',
       updatedAt: now,
     });
-    navigate('/items', { replace: true });
+    navigate('/', { replace: true });
   }
 
   return (
@@ -118,7 +118,7 @@ export default function ItemDetail() {
       {/* 页面头部 */}
       <div className="item-detail-header">
         <div className="item-detail-header-left">
-          <Link to="/items" className="item-detail-back">← 返回列表</Link>
+          <Link to="/" className="item-detail-back">← 返回列表</Link>
           <h2>{item.name}</h2>
         </div>
         <div className="item-detail-header-actions">

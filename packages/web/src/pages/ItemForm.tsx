@@ -58,7 +58,7 @@ export default function ItemForm() {
       try {
         const item = await db.items.get(id!);
         if (!item) {
-          navigate('/items', { replace: true });
+          navigate('/', { replace: true });
           return;
         }
         setFormData({
@@ -77,7 +77,7 @@ export default function ItemForm() {
         setCategoryId(item.categoryId);
         setTags(item.tags ?? []);
       } catch {
-        navigate('/items', { replace: true });
+        navigate('/', { replace: true });
       } finally {
         setLoading(false);
       }
@@ -159,7 +159,7 @@ export default function ItemForm() {
           updatedAt: now,
           syncStatus: 'pending',
         });
-        navigate('/items', { replace: true });
+        navigate('/', { replace: true });
       }
     } catch {
       setErrors({ general: '保存失败，请重试' });
@@ -173,7 +173,7 @@ export default function ItemForm() {
     if (isEdit && id) {
       navigate(`/items/${id}`);
     } else {
-      navigate('/items');
+      navigate('/');
     }
   }
 

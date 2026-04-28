@@ -4,6 +4,7 @@ import { useLiveQuery } from 'dexie-react-hooks';
 import { db, type ItemStatus, type LocalCategory } from '../db/index';
 import { useAuthStore } from '../stores/authStore';
 import { filterItems } from '../utils/filter';
+import { calculateAssetStatistics, getExpiringItems, type ExpiringItem } from '../utils/statistics';
 import ItemCard from '../components/ItemCard';
 import './ItemList.css';
 
@@ -16,9 +17,29 @@ const STATUS_OPTIONS: { value: '' | ItemStatus; label: string }[] = [
   { value: 'DISCARDED', label: '已丢弃' },
 ];
 
+/** 状态中文映射 */
+const STATUS_LABELS: Record<string, string> = {
+  IN_USE: '使用中',
+  IDLE: '闲置',
+  SOLD: '已出售',
+  DISCARDED: '已丢弃',
+};
+
+/** 格式化金额 */
+function formatCurrency(value: number): string {
+  return `¥${value.toLocaleString('zh-CN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+}
+
+/** 保修到期徽章 */
+function getExpiringBadge(daysRemaining: number): { className: string; label: string } {
+  if (daysRemaining < 0) return { className: 'badge-expired', label: `已过期 ${Math.abs(daysRemaining)} 天` };
+  if (daysRemaining <= 7) return { className: 'badge-urgent', label: `剩余 ${daysRemaining} 天` };
+  return { className: 'badge-normal', label: `剩余 ${daysRemaining} 天` };
+}
+
 /**
- * 物品列表页面
- * 使用 Dexie liveQuery 响应式查询 IndexedDB，支持搜索和筛选
+ * 物品主页
+ * 顶部展示资产统计，下方为物品列表（搜索、筛选、网格）
  */
 export default function ItemList() {
   const [search, setSearch] = useState('');
@@ -28,6 +49,7 @@ export default function ItemList() {
   const [exportLoading, setExportLoading] = useState(false);
   const [exportMsg, setExportMsg] = useState('');
   const [showExportMenu, setShowExportMenu] = useState(false);
+  const [showExpiring, setShowExpiring] = useState(false);
   const exportMenuRef = useRef<HTMLDivElement>(null);
 
   // 点击外部关闭导出菜单
@@ -37,9 +59,7 @@ export default function ItemList() {
         setShowExportMenu(false);
       }
     }
-    if (showExportMenu) {
-      document.addEventListener('mousedown', handleClickOutside);
-    }
+    if (showExportMenu) document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [showExportMenu]);
 
@@ -50,15 +70,11 @@ export default function ItemList() {
     return () => clearTimeout(timer);
   }, [exportMsg]);
 
-  /**
-   * 导出物品数据
-   * 直接使用 fetch 发送 POST 请求，处理 Blob 文件下载
-   */
+  /** 导出物品数据 */
   async function handleExport(format: 'excel' | 'pdf') {
     setShowExportMenu(false);
     setExportLoading(true);
     setExportMsg('');
-
     try {
       const token = useAuthStore.getState().token;
       const body: Record<string, unknown> = {};
@@ -75,20 +91,14 @@ export default function ItemList() {
         body: JSON.stringify(body),
       });
 
-      // 后端无数据时返回 JSON 提示
       const contentType = response.headers.get('content-type') || '';
       if (contentType.includes('application/json')) {
         const data = await response.json();
         setExportMsg(data?.message || '暂无数据可导出');
         return;
       }
+      if (!response.ok) { setExportMsg('导出失败，请稍后重试'); return; }
 
-      if (!response.ok) {
-        setExportMsg('导出失败，请稍后重试');
-        return;
-      }
-
-      // 接收 Blob 并触发浏览器下载
       const blob = await response.blob();
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
@@ -105,24 +115,12 @@ export default function ItemList() {
     }
   }
 
-  // 响应式查询所有未删除物品
-  const allItems = useLiveQuery(
-    () => db.items.filter((item) => !item.isDeleted).toArray(),
-    [],
-  );
+  // 响应式查询
+  const allItems = useLiveQuery(() => db.items.filter((item) => !item.isDeleted).toArray(), []);
+  const categories = useLiveQuery(() => db.categories.filter((cat) => !cat.isDeleted).toArray(), []);
 
-  // 响应式查询所有未删除分类
-  const categories = useLiveQuery(
-    () => db.categories.filter((cat) => !cat.isDeleted).toArray(),
-    [],
-  );
+  const allTags = allItems ? Array.from(new Set(allItems.flatMap((item) => item.tags))).sort() : [];
 
-  // 提取所有唯一标签用于筛选
-  const allTags = allItems
-    ? Array.from(new Set(allItems.flatMap((item) => item.tags))).sort()
-    : [];
-
-  // 应用筛选条件
   const filteredItems = allItems
     ? filterItems(allItems, {
         search: search || undefined,
@@ -132,13 +130,78 @@ export default function ItemList() {
       })
     : [];
 
+  // 统计数据
+  const statistics = allItems ? calculateAssetStatistics(allItems) : null;
+  const expiringItems = allItems ? getExpiringItems(allItems) : [];
+
   return (
     <div className="item-list-page">
-      {/* 页面头部 */}
+
+      {/* ── 资产统计区 ── */}
+      {statistics && (
+        <div className="item-list-stats">
+          {/* 三张摘要卡片 */}
+          <div className="stats-summary">
+            <div className="stats-card">
+              <span className="stats-label">总资产</span>
+              <span className="stats-value">{formatCurrency(statistics.totalAssets)}</span>
+            </div>
+            <div className="stats-card">
+              <span className="stats-label">日均成本</span>
+              <span className="stats-value">{formatCurrency(statistics.totalDailyCost)}</span>
+            </div>
+            <div className="stats-card">
+              <span className="stats-label">资产估值</span>
+              <span className="stats-value">{formatCurrency(statistics.totalResaleValue)}</span>
+            </div>
+          </div>
+
+          {/* 状态分布 + 保修提醒（紧凑行） */}
+          <div className="stats-meta">
+            <div className="stats-status-row">
+              {Object.entries(STATUS_LABELS).map(([key, label]) => (
+                <span key={key} className="stats-status-chip">
+                  <span className="stats-status-count">
+                    {statistics.statusCounts[key as keyof typeof statistics.statusCounts]}
+                  </span>
+                  <span className="stats-status-name">{label}</span>
+                </span>
+              ))}
+            </div>
+
+            {expiringItems.length > 0 && (
+              <button
+                className="stats-expiring-btn"
+                onClick={() => setShowExpiring((v) => !v)}
+              >
+                ⚠️ {expiringItems.length} 件保修即将到期
+                <span className="stats-expiring-arrow">{showExpiring ? '▲' : '▼'}</span>
+              </button>
+            )}
+          </div>
+
+          {/* 保修到期展开列表 */}
+          {showExpiring && expiringItems.length > 0 && (
+            <div className="stats-expiring-list">
+              {expiringItems.map((item: ExpiringItem) => {
+                const badge = getExpiringBadge(item.daysRemaining);
+                return (
+                  <Link key={item.id} to={`/items/${item.id}`} className="stats-expiring-item">
+                    <span className="stats-expiring-name">{item.name}</span>
+                    <span className="stats-expiring-date">{item.warrantyDate.slice(0, 10)}</span>
+                    <span className={`stats-expiring-badge ${badge.className}`}>{badge.label}</span>
+                  </Link>
+                );
+              })}
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* ── 物品列表区 ── */}
       <div className="item-list-header">
-        <h2>物品列表</h2>
+        <h2>物品</h2>
         <div className="item-list-actions">
-          {/* 导出下拉菜单 */}
           <div className="export-dropdown" ref={exportMenuRef}>
             <button
               className="btn-secondary"
@@ -164,12 +227,7 @@ export default function ItemList() {
         </div>
       </div>
 
-      {/* 导出提示信息 */}
-      {exportMsg && (
-        <div className="export-message">
-          {exportMsg}
-        </div>
-      )}
+      {exportMsg && <div className="export-message">{exportMsg}</div>}
 
       {/* 筛选栏 */}
       <div className="item-list-filters">
@@ -179,37 +237,22 @@ export default function ItemList() {
           value={search}
           onChange={(e) => setSearch(e.target.value)}
         />
-        <select
-          value={categoryId}
-          onChange={(e) => setCategoryId(e.target.value)}
-        >
+        <select value={categoryId} onChange={(e) => setCategoryId(e.target.value)}>
           <option value="">全部分类</option>
           {categories?.map((cat: LocalCategory) => (
-            <option key={cat.id} value={cat.id}>
-              {cat.name}
-            </option>
+            <option key={cat.id} value={cat.id}>{cat.name}</option>
           ))}
         </select>
-        <select
-          value={status}
-          onChange={(e) => setStatus(e.target.value as '' | ItemStatus)}
-        >
+        <select value={status} onChange={(e) => setStatus(e.target.value as '' | ItemStatus)}>
           {STATUS_OPTIONS.map((opt) => (
-            <option key={opt.value} value={opt.value}>
-              {opt.label}
-            </option>
+            <option key={opt.value} value={opt.value}>{opt.label}</option>
           ))}
         </select>
         {allTags.length > 0 && (
-          <select
-            value={tagFilter}
-            onChange={(e) => setTagFilter(e.target.value)}
-          >
+          <select value={tagFilter} onChange={(e) => setTagFilter(e.target.value)}>
             <option value="">全部标签</option>
             {allTags.map((tag) => (
-              <option key={tag} value={tag}>
-                {tag}
-              </option>
+              <option key={tag} value={tag}>{tag}</option>
             ))}
           </select>
         )}

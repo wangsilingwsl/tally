@@ -1,10 +1,156 @@
 /* ============================================================
- * 物品列表页面样式
+ * 物品主页样式（含资产统计 + 物品列表）
  * ============================================================ */
 
 .item-list-page {
   padding: var(--space-6) 0;
 }
+
+/* ── 资产统计区 ── */
+.item-list-stats {
+  margin-bottom: var(--space-6);
+}
+
+/* 三张摘要卡片 */
+.stats-summary {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-4);
+  margin-bottom: var(--space-3);
+}
+
+.stats-card {
+  background: var(--color-bg-card);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-ring);
+  padding: var(--space-4) var(--space-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.stats-label {
+  font-size: var(--text-xs);
+  color: var(--color-text-tertiary);
+  font-weight: var(--font-medium);
+}
+
+.stats-value {
+  font-family: var(--font-title);
+  font-size: var(--text-xl);
+  font-weight: var(--font-bold);
+  color: var(--color-text-brand);
+}
+
+/* 状态分布 + 保修提醒行 */
+.stats-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+}
+
+.stats-status-row {
+  display: flex;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+}
+
+.stats-status-chip {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+}
+
+.stats-status-count {
+  font-weight: var(--font-semibold);
+  color: var(--color-text-primary);
+}
+
+.stats-status-name {
+  color: var(--color-text-tertiary);
+}
+
+/* 保修提醒按钮 */
+.stats-expiring-btn {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--text-sm);
+  color: var(--color-warning);
+  background: #f5efd8;
+  border: none;
+  box-shadow: none;
+  border-radius: var(--radius-full);
+  padding: var(--space-1) var(--space-3);
+  cursor: pointer;
+  transition: background var(--transition-fast);
+}
+
+.stats-expiring-btn:hover {
+  background: #ede5c8;
+}
+
+.stats-expiring-arrow {
+  font-size: 10px;
+  opacity: 0.7;
+}
+
+/* 保修到期展开列表 */
+.stats-expiring-list {
+  margin-top: var(--space-3);
+  background: var(--color-bg-card);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-ring);
+  overflow: hidden;
+}
+
+.stats-expiring-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  border-bottom: 1px solid var(--color-border);
+  text-decoration: none;
+  color: inherit;
+  transition: background var(--transition-fast);
+}
+
+.stats-expiring-item:last-child { border-bottom: none; }
+.stats-expiring-item:hover { background: var(--color-bg-hover); }
+
+.stats-expiring-name {
+  flex: 1;
+  font-size: var(--text-sm);
+  font-weight: var(--font-medium);
+  color: var(--color-text-primary);
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.stats-expiring-date {
+  font-size: var(--text-xs);
+  color: var(--color-text-tertiary);
+  white-space: nowrap;
+}
+
+.stats-expiring-badge {
+  font-size: var(--text-xs);
+  font-weight: var(--font-medium);
+  padding: 2px var(--space-2);
+  border-radius: var(--radius-full);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.badge-expired { background-color: #f5e0dc; color: var(--color-danger); }
+.badge-urgent  { background-color: #f5efd8; color: var(--color-warning); }
+.badge-normal  { background-color: #e8f0e8; color: var(--color-success); }
 
 /* 页面头部：标题 + 操作按钮 */
 .item-list-header {
@@ -134,6 +280,14 @@
 
 /* 响应式：移动端筛选栏纵向排列 */
 @media (max-width: 767px) {
+  .stats-summary {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .stats-summary .stats-card:last-child {
+    grid-column: span 2;
+  }
+
   .item-list-filters {
     flex-direction: column;
   }
