@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { stopSyncEngine } from '../db/sync';
 
 /** 用户信息类型 */
 interface User {
@@ -42,6 +43,7 @@ export const useAuthStore = create<AuthState>((set) => ({
   },
 
   logout: () => {
+    stopSyncEngine();
     localStorage.removeItem(TOKEN_KEY);
     set({ token: null, user: null, loading: false });
   },

@@ -86,6 +86,44 @@
   padding: var(--space-1) var(--space-2);
 }
 
+/* 网络状态指示 */
+.network-indicator {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  font-size: var(--text-xs);
+  color: var(--color-text-tertiary);
+}
+
+.network-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: var(--radius-full);
+  flex-shrink: 0;
+}
+
+.network-dot.online {
+  background-color: var(--color-success);
+}
+
+.network-dot.offline {
+  background-color: var(--color-gray-400);
+}
+
+.network-dot.syncing {
+  animation: pulse-dot 1.2s ease-in-out infinite;
+}
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+.network-label {
+  white-space: nowrap;
+}
+
 /* ---- 响应式 ---- */
 
 /* 移动端：隐藏邮箱，导航链接缩小 */
@@ -104,6 +142,10 @@
   }
 
   .navbar-email {
+    display: none;
+  }
+
+  .network-label {
     display: none;
   }
 }

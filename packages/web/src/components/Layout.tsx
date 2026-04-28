@@ -1,6 +1,8 @@
 import { Outlet } from 'react-router';
 import { useEffect } from 'react';
 import { useAuthStore } from '../stores/authStore';
+import { useSyncStore } from '../stores/syncStore';
+import { startSyncEngine, stopSyncEngine } from '../db/sync';
 import { request } from '../utils/api';
 import { scanAndGenerateReminders } from '../utils/reminder';
 import Navbar from './Navbar';
@@ -26,6 +28,23 @@ export default function Layout() {
   const user = useAuthStore((s) => s.user);
   const setAuth = useAuthStore((s) => s.setAuth);
   const logout = useAuthStore((s) => s.logout);
+  const initSync = useSyncStore((s) => s.init);
+
+  // 初始化同步状态监听（在线/离线事件 + 同步状态回调）
+  useEffect(() => {
+    const cleanup = initSync();
+    return cleanup;
+  }, [initSync]);
+
+  // 登录后启动同步引擎，退出时停止
+  useEffect(() => {
+    if (token && user) {
+      startSyncEngine();
+    }
+    return () => {
+      stopSyncEngine();
+    };
+  }, [token, user]);
 
   // 应用加载时扫描提醒（离线也能工作）
   useEffect(() => {

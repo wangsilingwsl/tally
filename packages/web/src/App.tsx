@@ -9,20 +9,7 @@ import ItemList from './pages/ItemList';
 import ItemDetail from './pages/ItemDetail';
 import Dashboard from './pages/Dashboard';
 import Analytics from './pages/Analytics';
-
-/**
- * 占位页面组件，后续任务中替换为实际页面
- */
-function Placeholder({ title }: { title: string }) {
-  return (
-    <div style={{ padding: 'var(--space-4)' }}>
-      <h2>{title}</h2>
-      <p style={{ color: 'var(--color-text-secondary)', marginTop: '8px' }}>
-        此页面将在后续任务中实现
-      </p>
-    </div>
-  );
-}
+import Settings from './pages/Settings';
 
 /**
  * 公开路由守卫：已登录用户访问登录/注册页时重定向到首页
@@ -70,7 +57,7 @@ export default function App() {
             <Route path="/items/:id" element={<ItemDetail />} />
             <Route path="/items/:id/edit" element={<ItemForm />} />
             <Route path="/analytics" element={<Analytics />} />
-            <Route path="/settings" element={<Placeholder title="设置" />} />
+            <Route path="/settings" element={<Settings />} />
           </Route>
         </Route>
 
