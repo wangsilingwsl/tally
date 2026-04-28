@@ -5,6 +5,12 @@
 .settings-page {
   max-width: 640px;
   margin: 0 auto;
+  padding: var(--space-6) 0;
+}
+
+.settings-page h2 {
+  color: var(--color-text-primary);
+  margin-bottom: var(--space-6);
 }
 
 .settings-section {

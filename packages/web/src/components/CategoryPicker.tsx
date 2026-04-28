@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useLiveQuery } from 'dexie-react-hooks';
 import { db, type LocalCategory } from '../db/index';
 import ConfirmDialog from './ConfirmDialog';
@@ -13,6 +13,40 @@ interface CategoryPickerProps {
 
 /** 新建分类的特殊选项值 */
 const CREATE_NEW_VALUE = '__create_new__';
+
+/** 预置分类列表 */
+const DEFAULT_CATEGORIES = [
+  '电子产品',
+  '家用电器',
+  '家具家居',
+  '服饰鞋包',
+  '运动户外',
+  '图书文具',
+  '食品保健',
+  '美妆护肤',
+  '交通出行',
+  '其他',
+];
+
+/**
+ * 初始化预置分类（仅在本地无任何分类时执行一次）
+ */
+async function seedDefaultCategories(): Promise<void> {
+  const count = await db.categories.count();
+  if (count > 0) return;
+
+  const now = new Date().toISOString();
+  const records: LocalCategory[] = DEFAULT_CATEGORIES.map((name) => ({
+    id: crypto.randomUUID(),
+    name,
+    isDeleted: false,
+    createdAt: now,
+    updatedAt: now,
+    syncStatus: 'pending',
+  }));
+
+  await db.categories.bulkAdd(records);
+}
 
 /**
  * 分类选择器组件
@@ -33,6 +67,11 @@ export default function CategoryPicker({ value, onChange }: CategoryPickerProps)
     () => db.categories.filter((cat) => !cat.isDeleted).toArray(),
     [],
   );
+
+  // 首次加载时初始化预置分类
+  useEffect(() => {
+    seedDefaultCategories().catch(() => {});
+  }, []);
 
   /** 下拉框变更 */
   function handleSelectChange(e: React.ChangeEvent<HTMLSelectElement>) {

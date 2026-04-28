@@ -140,7 +140,7 @@ export default function Settings() {
 
   return (
     <div className="settings-page">
-      <h1 className="page-title">设置</h1>
+      <h2>设置</h2>
 
       {/* 同步状态卡片 */}
       <section className="settings-section card">
