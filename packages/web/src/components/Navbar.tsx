@@ -1,10 +1,11 @@
 import { Link, NavLink, useNavigate } from 'react-router';
 import { useAuthStore } from '../stores/authStore';
+import ReminderBell from './ReminderBell';
 import './Navbar.css';
 
 /**
  * 顶部导航栏
- * 包含 Logo、主导航链接、提醒铃铛（后续任务实现）、用户菜单
+ * 包含 Logo、主导航链接、提醒铃铛、用户菜单
  */
 export default function Navbar() {
   const navigate = useNavigate();
@@ -43,10 +44,8 @@ export default function Navbar() {
 
         {/* 右侧：提醒铃铛 + 用户菜单 */}
         <div className="navbar-actions">
-          {/* 提醒铃铛占位，后续任务实现 ReminderBell */}
-          <button className="navbar-bell" aria-label="提醒通知" title="提醒通知">
-            🔔
-          </button>
+          {/* 提醒通知铃铛 */}
+          <ReminderBell />
 
           {/* 用户菜单 */}
           <div className="navbar-user">

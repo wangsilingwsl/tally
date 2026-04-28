@@ -66,20 +66,6 @@
   gap: var(--space-3);
 }
 
-.navbar-bell {
-  background: none;
-  box-shadow: none;
-  font-size: var(--text-lg);
-  padding: var(--space-1);
-  cursor: pointer;
-  position: relative;
-}
-
-.navbar-bell:hover {
-  background-color: var(--color-bg-hover);
-  border-radius: var(--radius-md);
-}
-
 .navbar-user {
   display: flex;
   align-items: center;

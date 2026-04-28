@@ -1,0 +1,200 @@
+/* ============================================================
+ * 提醒通知铃铛样式
+ * ============================================================ */
+
+.reminder-bell {
+  position: relative;
+}
+
+.reminder-bell-btn {
+  background: none;
+  box-shadow: none;
+  font-size: var(--text-lg);
+  padding: var(--space-1);
+  cursor: pointer;
+  position: relative;
+  line-height: 1;
+}
+
+.reminder-bell-btn:hover {
+  background-color: var(--color-bg-hover);
+  border-radius: var(--radius-md);
+}
+
+/* 未读数量徽章 */
+.reminder-bell-badge {
+  position: absolute;
+  top: -4px;
+  right: -6px;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 4px;
+  font-size: 11px;
+  font-weight: var(--font-bold);
+  font-family: var(--font-body);
+  color: var(--color-text-inverse);
+  background-color: var(--color-danger);
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
+/* 下拉面板 */
+.reminder-dropdown {
+  position: absolute;
+  top: calc(100% + var(--space-2));
+  right: 0;
+  width: 360px;
+  max-height: 420px;
+  background-color: var(--color-bg-card);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-ring), 0 8px 24px rgba(0, 0, 0, 0.08);
+  z-index: 200;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* 下拉面板头部 */
+.reminder-dropdown-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-3) var(--space-4);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.reminder-dropdown-title {
+  font-size: var(--text-sm);
+  font-weight: var(--font-semibold);
+  color: var(--color-text-primary);
+}
+
+.reminder-read-all-btn {
+  font-size: var(--text-xs);
+  color: var(--color-text-brand);
+  background: none;
+  box-shadow: none;
+  padding: var(--space-1) var(--space-2);
+  cursor: pointer;
+  border-radius: var(--radius-sm);
+  transition: background-color var(--transition-fast);
+}
+
+.reminder-read-all-btn:hover {
+  background-color: var(--color-brand-light);
+}
+
+/* 提醒列表 */
+.reminder-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--space-2) 0;
+}
+
+.reminder-empty {
+  padding: var(--space-8) var(--space-4);
+  text-align: center;
+  font-size: var(--text-sm);
+  color: var(--color-text-tertiary);
+}
+
+/* 单条提醒 */
+.reminder-item {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  cursor: pointer;
+  transition: background-color var(--transition-fast);
+  border: none;
+  background: none;
+  box-shadow: none;
+  width: 100%;
+  text-align: left;
+}
+
+.reminder-item:hover {
+  background-color: var(--color-bg-hover);
+}
+
+.reminder-item.unread {
+  background-color: var(--color-gray-100);
+}
+
+/* 未读指示点 */
+.reminder-unread-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: var(--radius-full);
+  background-color: var(--color-brand);
+  flex-shrink: 0;
+  margin-top: 6px;
+}
+
+.reminder-unread-dot.read {
+  visibility: hidden;
+}
+
+/* 提醒内容 */
+.reminder-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.reminder-item-name {
+  font-size: var(--text-sm);
+  font-weight: var(--font-medium);
+  color: var(--color-text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.reminder-meta {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-top: var(--space-1);
+}
+
+.reminder-type {
+  font-size: var(--text-xs);
+  color: var(--color-text-tertiary);
+}
+
+.reminder-due {
+  font-size: var(--text-xs);
+  color: var(--color-text-tertiary);
+}
+
+/* 优先级徽章 */
+.reminder-priority {
+  display: inline-flex;
+  align-items: center;
+  font-size: 11px;
+  font-weight: var(--font-medium);
+  padding: 1px 6px;
+  border-radius: var(--radius-full);
+  line-height: 1.4;
+}
+
+.reminder-priority.high {
+  background-color: #f5e0dc;
+  color: var(--color-danger);
+}
+
+.reminder-priority.normal {
+  background-color: #f5efd8;
+  color: var(--color-warning);
+}
+
+/* 响应式：移动端下拉面板全宽 */
+@media (max-width: 767px) {
+  .reminder-dropdown {
+    width: 300px;
+    right: -40px;
+  }
+}
