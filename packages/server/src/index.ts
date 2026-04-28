@@ -7,6 +7,8 @@ import authRoutes from './routes/auth.js';
 import itemRoutes from './routes/items.js';
 import categoryRoutes from './routes/categories.js';
 import imageRoutes from './routes/images.js';
+import reminderRoutes from './routes/reminders.js';
+import { startReminderCron } from './services/reminderCron.js';
 
 /**
  * 统一错误响应格式
@@ -54,6 +56,9 @@ export async function buildApp() {
 
   // 注册图片管理路由
   await app.register(imageRoutes);
+
+  // 注册提醒管理路由
+  await app.register(reminderRoutes);
 
   // 全局错误处理器：统一错误响应格式
   app.setErrorHandler((error: FastifyError, _request: FastifyRequest, reply: FastifyReply) => {
@@ -105,6 +110,9 @@ async function start() {
   try {
     await app.listen({ port, host: '0.0.0.0' });
     app.log.info(`归物 · Tally 服务已启动，端口: ${port}`);
+
+    // 启动提醒定时任务
+    startReminderCron(app.prisma);
   } catch (err) {
     app.log.error(err);
     process.exit(1);
