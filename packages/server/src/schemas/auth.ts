@@ -51,3 +51,20 @@ export const loginSchema = {
     additionalProperties: false,
   },
 } as const;
+
+/** 更新用户设置请求 Schema */
+export const updateSettingsSchema = {
+  body: {
+    type: 'object',
+    properties: {
+      notifyEmail: {
+        type: ['string', 'null'],
+        maxLength: 255,
+      },
+      emailEnabled: {
+        type: 'boolean',
+      },
+    },
+    additionalProperties: false,
+  },
+} as const;

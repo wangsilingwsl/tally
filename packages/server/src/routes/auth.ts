@@ -15,6 +15,12 @@ interface LoginBody {
   password: string;
 }
 
+/** 更新用户设置请求体类型 */
+interface UpdateSettingsBody {
+  notifyEmail?: string | null;
+  emailEnabled?: boolean;
+}
+
 /** bcrypt 哈希轮数 */
 const SALT_ROUNDS = 10;
 
@@ -150,6 +156,37 @@ export default async function authRoutes(fastify: FastifyInstance) {
           message: '用户不存在',
         });
       }
+
+      return reply.send({ user });
+    },
+  );
+
+  /**
+   * PUT /api/auth/me - 更新当前用户设置
+   * 支持更新提醒邮箱和邮件通知开关
+   */
+  fastify.put(
+    '/api/auth/me',
+    { preHandler: [fastify.authenticate] },
+    async (request, reply) => {
+      const { notifyEmail, emailEnabled } = request.body as UpdateSettingsBody;
+
+      // 构建更新数据，仅包含请求中提供的字段
+      const data: Record<string, unknown> = {};
+      if (notifyEmail !== undefined) data.notifyEmail = notifyEmail || null;
+      if (emailEnabled !== undefined) data.emailEnabled = emailEnabled;
+
+      const user = await fastify.prisma.user.update({
+        where: { id: request.user.userId },
+        data,
+        select: {
+          id: true,
+          email: true,
+          notifyEmail: true,
+          emailEnabled: true,
+          createdAt: true,
+        },
+      });
 
       return reply.send({ user });
     },

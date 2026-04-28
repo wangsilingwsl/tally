@@ -5,6 +5,8 @@ import { stopSyncEngine } from '../db/sync';
 interface User {
   id: string;
   email: string;
+  notifyEmail?: string | null;
+  emailEnabled?: boolean;
   createdAt: string;
 }
 
@@ -19,6 +21,8 @@ interface AuthState {
 
   /** 设置登录信息（Token + 用户） */
   setAuth: (token: string, user: User) => void;
+  /** 更新用户信息（不改变 Token） */
+  updateUser: (user: User) => void;
   /** 退出登录：清除 Token 和用户信息 */
   logout: () => void;
   /** 设置加载状态 */
@@ -41,6 +45,8 @@ export const useAuthStore = create<AuthState>((set) => ({
     localStorage.setItem(TOKEN_KEY, token);
     set({ token, user, loading: false });
   },
+
+  updateUser: (user) => set({ user }),
 
   logout: () => {
     stopSyncEngine();
