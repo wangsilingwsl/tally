@@ -4,6 +4,7 @@ import ProtectedRoute from './components/ProtectedRoute';
 import Layout from './components/Layout';
 import Login from './pages/Login';
 import Register from './pages/Register';
+import ItemForm from './pages/ItemForm';
 
 /**
  * 占位页面组件，后续任务中替换为实际页面
@@ -61,9 +62,9 @@ export default function App() {
           <Route element={<Layout />}>
             <Route path="/" element={<Placeholder title="资产总览" />} />
             <Route path="/items" element={<Placeholder title="物品列表" />} />
-            <Route path="/items/new" element={<Placeholder title="新增物品" />} />
+            <Route path="/items/new" element={<ItemForm />} />
             <Route path="/items/:id" element={<Placeholder title="物品详情" />} />
-            <Route path="/items/:id/edit" element={<Placeholder title="编辑物品" />} />
+            <Route path="/items/:id/edit" element={<ItemForm />} />
             <Route path="/analytics" element={<Placeholder title="消费统计" />} />
             <Route path="/settings" element={<Placeholder title="设置" />} />
           </Route>
