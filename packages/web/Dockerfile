@@ -1,0 +1,25 @@
+# 阶段一：构建静态资源
+FROM node:20-alpine AS builder
+
+WORKDIR /app
+
+# 先复制依赖文件，利用 Docker 缓存层
+COPY package*.json ./
+RUN npm ci
+
+# 复制源码并构建
+COPY . .
+RUN npm run build
+
+# 阶段二：Nginx 提供静态服务
+FROM nginx:alpine
+
+# 复制构建产物到 Nginx 默认目录
+COPY --from=builder /app/dist /usr/share/nginx/html
+
+# 复制自定义 Nginx 配置
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+
+EXPOSE 80
+
+CMD ["nginx", "-g", "daemon off;"]
