@@ -6,6 +6,7 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import ItemForm from './pages/ItemForm';
 import ItemList from './pages/ItemList';
+import ItemDetail from './pages/ItemDetail';
 
 /**
  * 占位页面组件，后续任务中替换为实际页面
@@ -64,7 +65,7 @@ export default function App() {
             <Route path="/" element={<Placeholder title="资产总览" />} />
             <Route path="/items" element={<ItemList />} />
             <Route path="/items/new" element={<ItemForm />} />
-            <Route path="/items/:id" element={<Placeholder title="物品详情" />} />
+            <Route path="/items/:id" element={<ItemDetail />} />
             <Route path="/items/:id/edit" element={<ItemForm />} />
             <Route path="/analytics" element={<Placeholder title="消费统计" />} />
             <Route path="/settings" element={<Placeholder title="设置" />} />

@@ -1,0 +1,196 @@
+/* ============================================================
+ * 物品详情页面样式
+ * ============================================================ */
+
+.item-detail-page {
+  padding: var(--space-6) 0;
+}
+
+/* 页面头部 */
+.item-detail-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-4);
+  margin-bottom: var(--space-6);
+}
+
+.item-detail-header-left {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.item-detail-back {
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+.item-detail-back:hover {
+  color: var(--color-text-brand);
+}
+
+.item-detail-header h2 {
+  color: var(--color-text-primary);
+}
+
+.item-detail-header-actions {
+  display: flex;
+  gap: var(--space-3);
+  flex-shrink: 0;
+}
+
+.item-detail-header-actions button {
+  padding: var(--space-2) var(--space-5);
+}
+
+/* 概览卡片 */
+.item-detail-overview {
+  margin-bottom: var(--space-4);
+}
+
+.item-detail-overview-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-6);
+}
+
+.item-detail-stat {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.item-detail-stat-label {
+  font-size: var(--text-xs);
+  color: var(--color-text-tertiary);
+  font-weight: var(--font-medium);
+}
+
+.item-detail-stat-value {
+  font-size: var(--text-lg);
+  font-weight: var(--font-semibold);
+  color: var(--color-text-primary);
+}
+
+.item-detail-stat-brand {
+  color: var(--color-text-brand);
+}
+
+/* 保修状态标识 */
+.item-detail-warranty-badge {
+  display: inline-flex;
+  align-items: center;
+  font-size: var(--text-xs);
+  font-weight: var(--font-medium);
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-full);
+  line-height: 1;
+}
+
+.warranty-active {
+  background-color: #e8f0e8;
+  color: var(--color-success);
+}
+
+.warranty-expiring {
+  background-color: #f5efd8;
+  color: var(--color-warning);
+}
+
+.warranty-expired {
+  background-color: #f5e0dc;
+  color: var(--color-danger);
+}
+
+/* 详细信息卡片 */
+.item-detail-info {
+  margin-bottom: var(--space-4);
+}
+
+.item-detail-info h3 {
+  font-size: var(--text-lg);
+  margin-bottom: var(--space-4);
+  color: var(--color-text-primary);
+}
+
+.item-detail-fields {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-4);
+}
+
+@media (min-width: 480px) {
+  .item-detail-fields {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.item-detail-field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.item-detail-field-label {
+  font-size: var(--text-xs);
+  color: var(--color-text-tertiary);
+  font-weight: var(--font-medium);
+}
+
+.item-detail-field-value {
+  font-size: var(--text-base);
+  color: var(--color-text-primary);
+}
+
+/* 标签展示 */
+.item-detail-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1);
+}
+
+.item-detail-tag {
+  display: inline-flex;
+  align-items: center;
+  font-size: var(--text-xs);
+  font-weight: var(--font-medium);
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-full);
+  background-color: var(--color-brand-light);
+  color: var(--color-text-brand);
+}
+
+/* 备注区域 */
+.item-detail-note {
+  margin-top: var(--space-6);
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--color-border);
+}
+
+.item-detail-note h4 {
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+  margin-bottom: var(--space-2);
+}
+
+.item-detail-note p {
+  font-size: var(--text-base);
+  color: var(--color-text-primary);
+  line-height: var(--leading-relaxed);
+  white-space: pre-wrap;
+}
+
+/* 响应式：移动端头部纵向排列 */
+@media (max-width: 767px) {
+  .item-detail-header {
+    flex-direction: column;
+  }
+
+  .item-detail-overview-row {
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+}
