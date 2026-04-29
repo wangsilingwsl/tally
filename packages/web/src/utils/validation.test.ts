@@ -11,6 +11,7 @@ function validFormData(overrides: Partial<ItemFormData> = {}): ItemFormData {
     purchasePrice: '299.99',
     purchaseChannel: '',
     resalePrice: '',
+    soldPrice: '',
     status: 'IN_USE',
     warrantyDate: '',
     expiryDate: '',
@@ -86,10 +87,33 @@ describe('validateItemForm', () => {
   });
 
   it('所有合法状态值均通过校验', () => {
-    for (const status of ['IN_USE', 'IDLE', 'SOLD', 'DISCARDED']) {
+    for (const status of ['IN_USE', 'IDLE', 'DISCARDED']) {
       const errors = validateItemForm(validFormData({ status }));
       expect(errors.status).toBeUndefined();
     }
+    // SOLD 状态需要填写出售价格
+    const soldErrors = validateItemForm(validFormData({ status: 'SOLD', soldPrice: '100' }));
+    expect(soldErrors.status).toBeUndefined();
+  });
+
+  it('状态为 SOLD 时出售价格为空返回错误', () => {
+    const errors = validateItemForm(validFormData({ status: 'SOLD', soldPrice: '' }));
+    expect(errors.soldPrice).toBeDefined();
+  });
+
+  it('状态为 SOLD 时出售价格为负数返回错误', () => {
+    const errors = validateItemForm(validFormData({ status: 'SOLD', soldPrice: '-1' }));
+    expect(errors.soldPrice).toBeDefined();
+  });
+
+  it('状态为 SOLD 时出售价格为 0 校验通过', () => {
+    const errors = validateItemForm(validFormData({ status: 'SOLD', soldPrice: '0' }));
+    expect(errors.soldPrice).toBeUndefined();
+  });
+
+  it('状态非 SOLD 时出售价格为空不报错', () => {
+    const errors = validateItemForm(validFormData({ status: 'IN_USE', soldPrice: '' }));
+    expect(errors.soldPrice).toBeUndefined();
   });
 });
 

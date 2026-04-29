@@ -121,6 +121,20 @@ export default function Analytics() {
             <span className="analytics-summary-label">总资产估值</span>
             <span className="analytics-summary-value">{formatCurrency(statistics.totalResaleValue)}</span>
           </div>
+          <div className="analytics-summary-card">
+            <span className="analytics-summary-label">出售总收入</span>
+            <span className="analytics-summary-value">{formatCurrency(statistics.totalSoldIncome)}</span>
+          </div>
+          <div className="analytics-summary-card">
+            <span className="analytics-summary-label">已出售物品</span>
+            <span className="analytics-summary-value">{statistics.soldCount} 件</span>
+          </div>
+          {statistics.soldRecoveryRate !== null && (
+            <div className="analytics-summary-card">
+              <span className="analytics-summary-label">出售回收率</span>
+              <span className="analytics-summary-value">{statistics.soldRecoveryRate}%</span>
+            </div>
+          )}
         </div>
       )}
 

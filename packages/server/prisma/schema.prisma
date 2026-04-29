@@ -33,6 +33,7 @@ model Item {
   purchasePrice   Float                           // 购买价格（必填）
   purchaseChannel String?                         // 购买渠道
   resalePrice     Float?                          // 预估二手回收价格
+  soldPrice       Float?                          // 实际出售价格（状态为 SOLD 时填写）
   status          String   @default("IN_USE")     // 物品状态
   warrantyDate    DateTime?                       // 保修到期日期
   expiryDate      DateTime?                       // 有效期到期日期

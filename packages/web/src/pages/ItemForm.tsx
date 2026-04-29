@@ -26,6 +26,7 @@ function getInitialFormData(): ItemFormData {
     purchasePrice: '',
     purchaseChannel: '',
     resalePrice: '',
+    soldPrice: '',
     status: 'IN_USE',
     warrantyDate: '',
     expiryDate: '',
@@ -69,6 +70,7 @@ export default function ItemForm() {
           purchasePrice: String(item.purchasePrice),
           purchaseChannel: item.purchaseChannel ?? '',
           resalePrice: item.resalePrice != null ? String(item.resalePrice) : '',
+          soldPrice: item.soldPrice != null ? String(item.soldPrice) : '',
           status: item.status,
           warrantyDate: item.warrantyDate ?? '',
           expiryDate: item.expiryDate ?? '',
@@ -115,6 +117,7 @@ export default function ItemForm() {
       const now = new Date().toISOString();
       const purchasePrice = Number(formData.purchasePrice);
       const resalePrice = formData.resalePrice !== '' ? Number(formData.resalePrice) : undefined;
+      const soldPrice = formData.soldPrice !== '' ? Number(formData.soldPrice) : undefined;
 
       if (isEdit && id) {
         // 编辑模式：更新已有记录
@@ -126,6 +129,7 @@ export default function ItemForm() {
           purchasePrice,
           purchaseChannel: formData.purchaseChannel.trim() || undefined,
           resalePrice,
+          soldPrice,
           status: formData.status as ItemStatus,
           warrantyDate: formData.warrantyDate || undefined,
           expiryDate: formData.expiryDate || undefined,
@@ -148,6 +152,7 @@ export default function ItemForm() {
           purchasePrice,
           purchaseChannel: formData.purchaseChannel.trim() || undefined,
           resalePrice,
+          soldPrice,
           status: formData.status as ItemStatus,
           warrantyDate: formData.warrantyDate || undefined,
           expiryDate: formData.expiryDate || undefined,
@@ -312,6 +317,24 @@ export default function ItemForm() {
             </select>
             {errors.status && <span className="field-error">{errors.status}</span>}
           </div>
+
+          {/* 出售价格：仅状态为"已出售"时显示 */}
+          {formData.status === 'SOLD' && (
+            <div className={`form-field ${errors.soldPrice ? 'has-error' : ''}`}>
+              <label htmlFor="soldPrice">出售价格 <span className="required">*</span></label>
+              <input
+                id="soldPrice"
+                name="soldPrice"
+                type="number"
+                min="0"
+                step="0.01"
+                placeholder="请输入实际出售价格"
+                value={formData.soldPrice}
+                onChange={handleChange}
+              />
+              {errors.soldPrice && <span className="field-error">{errors.soldPrice}</span>}
+            </div>
+          )}
 
           {/* 分类 */}
           <div className="form-field">

@@ -196,6 +196,12 @@ export default function ItemDetail() {
             <span className="item-detail-field-label">预估二手回收价格</span>
             <span className="item-detail-field-value">{formatPrice(item.resalePrice)}</span>
           </div>
+          {item.status === 'SOLD' && (
+            <div className="item-detail-field">
+              <span className="item-detail-field-label">出售价格</span>
+              <span className="item-detail-field-value">{formatPrice(item.soldPrice)}</span>
+            </div>
+          )}
           <div className="item-detail-field">
             <span className="item-detail-field-label">物品状态</span>
             <span className="item-detail-field-value">{STATUS_LABEL[item.status] ?? item.status}</span>

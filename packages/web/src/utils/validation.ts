@@ -10,6 +10,7 @@ export type ValidationErrors = {
   purchaseDate?: string;
   purchasePrice?: string;
   resalePrice?: string;
+  soldPrice?: string;
   status?: string;
 };
 
@@ -22,6 +23,7 @@ export interface ItemFormData {
   purchasePrice: string;
   purchaseChannel: string;
   resalePrice: string;
+  soldPrice: string;
   status: string;
   warrantyDate: string;
   expiryDate: string;
@@ -67,6 +69,27 @@ export function validateItemForm(data: ItemFormData): ValidationErrors {
       errors.resalePrice = '二手回收价格必须为数值';
     } else if (resale < 0) {
       errors.resalePrice = '二手回收价格不能为负数';
+    }
+  }
+
+  // 实际出售价格：状态为 SOLD 时必填，且必须为非负数值
+  if (data.status === 'SOLD') {
+    if (!data.soldPrice && data.soldPrice !== '0') {
+      errors.soldPrice = '已出售状态需填写出售价格';
+    } else {
+      const sold = Number(data.soldPrice);
+      if (isNaN(sold)) {
+        errors.soldPrice = '出售价格必须为数值';
+      } else if (sold < 0) {
+        errors.soldPrice = '出售价格不能为负数';
+      }
+    }
+  } else if (data.soldPrice !== '') {
+    const sold = Number(data.soldPrice);
+    if (isNaN(sold)) {
+      errors.soldPrice = '出售价格必须为数值';
+    } else if (sold < 0) {
+      errors.soldPrice = '出售价格不能为负数';
     }
   }
 

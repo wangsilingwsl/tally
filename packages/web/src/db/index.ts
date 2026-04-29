@@ -16,6 +16,7 @@ export interface LocalItem {
   purchasePrice: number;
   purchaseChannel?: string;
   resalePrice?: number;
+  soldPrice?: number;      // 实际出售价格（状态为 SOLD 时填写）
   status: ItemStatus;
   warrantyDate?: string;
   expiryDate?: string;

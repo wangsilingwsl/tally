@@ -37,6 +37,9 @@ interface SummaryData {
   totalItems: number;
   totalDailyCost: number;
   statusCounts: Record<string, number>;
+  totalSoldIncome: number;
+  soldCount: number;
+  soldRecoveryRate: number | null;
 }
 
 /**
@@ -249,6 +252,7 @@ export default async function analyticsRoutes(fastify: FastifyInstance) {
           purchasePrice: true,
           purchaseDate: true,
           resalePrice: true,
+          soldPrice: true,
           status: true,
         },
       });
@@ -256,6 +260,9 @@ export default async function analyticsRoutes(fastify: FastifyInstance) {
       let totalAssets = 0;
       let totalResaleValue = 0;
       let totalDailyCost = 0;
+      let totalSoldIncome = 0;
+      let soldCount = 0;
+      let soldPurchaseTotal = 0;
 
       // 初始化状态计数
       const statusCounts: Record<string, number> = {
@@ -280,7 +287,22 @@ export default async function analyticsRoutes(fastify: FastifyInstance) {
 
         // 状态计数
         statusCounts[item.status] = (statusCounts[item.status] || 0) + 1;
+
+        // 出售统计
+        if (item.status === 'SOLD') {
+          soldCount++;
+          soldPurchaseTotal += price;
+          if (item.soldPrice != null) {
+            totalSoldIncome += toNumber(item.soldPrice);
+          }
+        }
       }
+
+      // 出售回收率 = 出售总收入 / 已出售物品购入总价
+      const soldRecoveryRate =
+        soldCount > 0 && soldPurchaseTotal > 0
+          ? Math.round((totalSoldIncome / soldPurchaseTotal) * 10000) / 100
+          : null;
 
       const summary: SummaryData = {
         totalAssets: Math.round(totalAssets * 100) / 100,
@@ -288,6 +310,9 @@ export default async function analyticsRoutes(fastify: FastifyInstance) {
         totalItems: items.length,
         totalDailyCost: Math.round(totalDailyCost * 100) / 100,
         statusCounts,
+        totalSoldIncome: Math.round(totalSoldIncome * 100) / 100,
+        soldCount,
+        soldRecoveryRate,
       };
 
       return reply.send({ summary });

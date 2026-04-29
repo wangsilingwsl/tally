@@ -17,6 +17,7 @@ interface CreateItemBody {
   purchasePrice: number;
   purchaseChannel?: string;
   resalePrice?: number;
+  soldPrice?: number;
   status: string;
   warrantyDate?: string;
   expiryDate?: string;
@@ -34,6 +35,7 @@ interface UpdateItemBody {
   purchasePrice?: number;
   purchaseChannel?: string;
   resalePrice?: number | null;
+  soldPrice?: number | null;
   status?: string;
   warrantyDate?: string | null;
   expiryDate?: string | null;
@@ -243,6 +245,7 @@ export default async function itemRoutes(fastify: FastifyInstance) {
           purchasePrice: data.purchasePrice,
           purchaseChannel: data.purchaseChannel,
           resalePrice: data.resalePrice ?? null,
+          soldPrice: data.soldPrice ?? null,
           status: data.status,
           warrantyDate: data.warrantyDate ? new Date(data.warrantyDate) : null,
           expiryDate: data.expiryDate ? new Date(data.expiryDate) : null,
@@ -307,6 +310,9 @@ export default async function itemRoutes(fastify: FastifyInstance) {
       if (data.purchaseChannel !== undefined) updateData.purchaseChannel = data.purchaseChannel;
       if (data.resalePrice !== undefined) {
         updateData.resalePrice = data.resalePrice ?? null;
+      }
+      if (data.soldPrice !== undefined) {
+        updateData.soldPrice = data.soldPrice ?? null;
       }
       if (data.status !== undefined) updateData.status = data.status;
       if (data.warrantyDate !== undefined) {

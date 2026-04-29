@@ -16,6 +16,12 @@ export interface AssetStatistics {
   totalResaleValue: number;
   /** 按状态分组的物品数量 */
   statusCounts: Record<ItemStatus, number>;
+  /** 出售总收入 = Σ(soldPrice)，仅包含已填写出售价格的已出售物品 */
+  totalSoldIncome: number;
+  /** 已出售物品数量 */
+  soldCount: number;
+  /** 出售回收率 = 出售总收入 / 已出售物品购入总价，null 表示无已出售物品 */
+  soldRecoveryRate: number | null;
 }
 
 /** 即将到期保修物品 */
@@ -44,6 +50,9 @@ export function calculateAssetStatistics(items: LocalItem[]): AssetStatistics {
   let totalAssets = 0;
   let totalDailyCost = 0;
   let totalResaleValue = 0;
+  let totalSoldIncome = 0;
+  let soldCount = 0;
+  let soldPurchaseTotal = 0;
 
   for (const item of activeItems) {
     totalAssets += item.purchasePrice;
@@ -52,13 +61,31 @@ export function calculateAssetStatistics(items: LocalItem[]): AssetStatistics {
       totalResaleValue += item.resalePrice;
     }
     statusCounts[item.status]++;
+
+    // 出售统计：仅统计已出售且填写了出售价格的物品
+    if (item.status === 'SOLD') {
+      soldCount++;
+      soldPurchaseTotal += item.purchasePrice;
+      if (item.soldPrice != null && item.soldPrice >= 0) {
+        totalSoldIncome += item.soldPrice;
+      }
+    }
   }
+
+  // 出售回收率 = 出售总收入 / 已出售物品购入总价
+  const soldRecoveryRate =
+    soldCount > 0 && soldPurchaseTotal > 0
+      ? Math.round((totalSoldIncome / soldPurchaseTotal) * 10000) / 100
+      : null;
 
   return {
     totalAssets: Math.round(totalAssets * 100) / 100,
     totalDailyCost: Math.round(totalDailyCost * 100) / 100,
     totalResaleValue: Math.round(totalResaleValue * 100) / 100,
     statusCounts,
+    totalSoldIncome: Math.round(totalSoldIncome * 100) / 100,
+    soldCount,
+    soldRecoveryRate,
   };
 }
 

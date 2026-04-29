@@ -41,6 +41,10 @@ export const createItemSchema = {
         type: 'number',
         minimum: 0,
       },
+      soldPrice: {
+        type: 'number',
+        minimum: 0,
+      },
       status: {
         type: 'string',
         enum: ITEM_STATUS_ENUM,
@@ -106,6 +110,10 @@ export const updateItemSchema = {
         maxLength: 255,
       },
       resalePrice: {
+        type: ['number', 'null'],
+        minimum: 0,
+      },
+      soldPrice: {
         type: ['number', 'null'],
         minimum: 0,
       },
