@@ -21,19 +21,20 @@
 /* 总资产摘要卡片 */
 .analytics-summary {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: var(--space-4);
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: var(--space-3);
   margin-bottom: var(--space-6);
 }
 
 .analytics-summary-card {
   background: var(--color-bg-card);
-  border-radius: var(--radius-xl);
+  border-radius: var(--radius-md);
   box-shadow: var(--shadow-ring);
-  padding: var(--space-5);
+  padding: var(--space-4);
   display: flex;
   flex-direction: column;
-  gap: var(--space-2);
+  gap: var(--space-1);
+  min-width: 0;
 }
 
 .analytics-summary-label {
@@ -44,9 +45,10 @@
 
 .analytics-summary-value {
   font-family: var(--font-body);
-  font-size: var(--text-2xl);
+  font-size: var(--text-xl);
   font-weight: var(--font-bold);
   color: var(--color-text-brand);
+  white-space: nowrap;
 }
 
 /* 区块通用 */
