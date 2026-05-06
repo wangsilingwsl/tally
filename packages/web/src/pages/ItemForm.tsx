@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router';
+import { useLiveQuery } from 'dexie-react-hooks';
 import { db, type ItemStatus } from '../db/index';
 import { validateItemForm, isValid, type ItemFormData } from '../utils/validation';
 import CategoryPicker from '../components/CategoryPicker';
@@ -50,6 +51,17 @@ export default function ItemForm() {
   const [errors, setErrors] = useState<Record<string, string | undefined>>({});
   const [submitting, setSubmitting] = useState(false);
   const [loading, setLoading] = useState(isEdit);
+  const defaultCategory = useLiveQuery(
+    () => db.categories.filter((cat) => !cat.isDeleted && cat.name === '电子产品').first(),
+    [],
+  );
+
+  // 新增模式：默认选择电子产品分类
+  useEffect(() => {
+    if (!isEdit && !categoryId && defaultCategory) {
+      setCategoryId(defaultCategory.id);
+    }
+  }, [categoryId, defaultCategory, isEdit]);
 
   // 编辑模式：加载已有数据
   useEffect(() => {

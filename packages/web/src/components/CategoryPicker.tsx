@@ -17,9 +17,9 @@ const CREATE_NEW_VALUE = '__create_new__';
 /** 预置分类列表 */
 const DEFAULT_CATEGORIES = [
   '电子产品',
+  '服饰鞋包',
   '家用电器',
   '家具家居',
-  '服饰鞋包',
   '运动户外',
   '图书文具',
   '食品保健',
@@ -27,6 +27,17 @@ const DEFAULT_CATEGORIES = [
   '交通出行',
   '其他',
 ];
+
+const CATEGORY_ORDER = new Map(DEFAULT_CATEGORIES.map((name, index) => [name, index]));
+
+function sortCategories(categories: LocalCategory[]): LocalCategory[] {
+  return [...categories].sort((a, b) => {
+    const orderA = CATEGORY_ORDER.get(a.name) ?? Number.MAX_SAFE_INTEGER;
+    const orderB = CATEGORY_ORDER.get(b.name) ?? Number.MAX_SAFE_INTEGER;
+    if (orderA !== orderB) return orderA - orderB;
+    return a.createdAt.localeCompare(b.createdAt);
+  });
+}
 
 /** 防止重复初始化的模块级标记 */
 let seeded = false;
@@ -93,6 +104,7 @@ export default function CategoryPicker({ value, onChange }: CategoryPickerProps)
     () => db.categories.filter((cat) => !cat.isDeleted).toArray(),
     [],
   );
+  const sortedCategories = categories ? sortCategories(categories) : undefined;
 
   // 首次加载时初始化预置分类
   useEffect(() => {
@@ -257,7 +269,7 @@ export default function CategoryPicker({ value, onChange }: CategoryPickerProps)
           aria-label="选择分类"
         >
           <option value="">未分类</option>
-          {categories?.map((cat) => (
+          {sortedCategories?.map((cat) => (
             <option key={cat.id} value={cat.id}>
               {cat.name}
             </option>
@@ -310,11 +322,11 @@ export default function CategoryPicker({ value, onChange }: CategoryPickerProps)
       {createError && <span className="category-picker-error">{createError}</span>}
 
       {/* 分类管理面板 */}
-      {showManage && categories && categories.length > 0 && (
+      {showManage && sortedCategories && sortedCategories.length > 0 && (
         <div className="category-manage-panel">
           <div className="category-manage-panel-title">分类管理</div>
           <div className="category-manage-list">
-            {categories.map((cat) => (
+            {sortedCategories.map((cat) => (
               <div key={cat.id} className="category-manage-item">
                 {editingId === cat.id ? (
                   <>

@@ -75,6 +75,7 @@
 /* 表单操作按钮区 */
 .form-actions {
   display: flex;
+  justify-content: center;
   gap: var(--space-3);
   margin-top: var(--space-4);
 }
