@@ -159,14 +159,12 @@ export default function ItemDetail() {
         </div>
       </div>
 
-      {/* 图片画廊 */}
-      <div className="item-detail-gallery">
-        <ImageGallery itemId={id!} />
-      </div>
-
       {/* 详细信息 */}
       <div className="item-detail-info card">
         <h3>详细信息</h3>
+        <div className="item-detail-gallery">
+          <ImageGallery itemId={id!} />
+        </div>
         <div className="item-detail-fields">
           <div className="item-detail-field">
             <span className="item-detail-field-label">名称</span>

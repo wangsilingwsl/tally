@@ -197,5 +197,7 @@
 
 /* 图片画廊区域 */
 .item-detail-gallery {
-  margin-bottom: var(--space-4);
+  margin-bottom: var(--space-6);
+  padding-bottom: var(--space-4);
+  border-bottom: 1px solid var(--color-border);
 }
