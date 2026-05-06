@@ -73,7 +73,7 @@ export default function ItemList() {
   const [categoryId, setCategoryId] = useState('');
   const [status, setStatus] = useState<'' | ItemStatus>('');
   const [tagFilter, setTagFilter] = useState('');
-  const [sortBy, setSortBy] = useState<SortOption>('updated-desc');
+  const [sortBy, setSortBy] = useState<SortOption>('price-desc');
   const [exportLoading, setExportLoading] = useState(false);
   const [exportMsg, setExportMsg] = useState('');
   const [showExportMenu, setShowExportMenu] = useState(false);
