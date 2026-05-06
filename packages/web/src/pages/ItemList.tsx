@@ -8,6 +8,16 @@ import { calculateAssetStatistics, getExpiringItems, type ExpiringItem } from '.
 import ItemCard from '../components/ItemCard';
 import './ItemList.css';
 
+type SortOption =
+  | 'updated-desc'
+  | 'days-desc'
+  | 'days-asc'
+  | 'price-desc'
+  | 'price-asc'
+  | 'daily-cost-desc'
+  | 'daily-cost-asc'
+  | 'name-asc';
+
 /** 状态筛选选项 */
 const STATUS_OPTIONS: { value: '' | ItemStatus; label: string }[] = [
   { value: '', label: '全部状态' },
@@ -25,9 +35,26 @@ const STATUS_LABELS: Record<string, string> = {
   DISCARDED: '已丢弃',
 };
 
+const SORT_OPTIONS: { value: SortOption; label: string }[] = [
+  { value: 'updated-desc', label: '最近更新' },
+  { value: 'days-desc', label: '使用天数最长' },
+  { value: 'days-asc', label: '使用天数最短' },
+  { value: 'price-desc', label: '价格最高' },
+  { value: 'price-asc', label: '价格最低' },
+  { value: 'daily-cost-desc', label: '日均成本最高' },
+  { value: 'daily-cost-asc', label: '日均成本最低' },
+  { value: 'name-asc', label: '名称 A-Z' },
+];
+
 /** 格式化金额 */
 function formatCurrency(value: number): string {
   return `¥${value.toLocaleString('zh-CN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+}
+
+function getDaysUsed(purchaseDate: string): number {
+  return Math.max(0, Math.floor(
+    (Date.now() - new Date(purchaseDate).getTime()) / (1000 * 60 * 60 * 24),
+  ));
 }
 
 /** 保修到期徽章 */
@@ -46,6 +73,7 @@ export default function ItemList() {
   const [categoryId, setCategoryId] = useState('');
   const [status, setStatus] = useState<'' | ItemStatus>('');
   const [tagFilter, setTagFilter] = useState('');
+  const [sortBy, setSortBy] = useState<SortOption>('updated-desc');
   const [exportLoading, setExportLoading] = useState(false);
   const [exportMsg, setExportMsg] = useState('');
   const [showExportMenu, setShowExportMenu] = useState(false);
@@ -129,6 +157,30 @@ export default function ItemList() {
         tag: tagFilter || undefined,
       })
     : [];
+
+  const sortedItems = [...filteredItems].sort((a, b) => {
+    switch (sortBy) {
+      case 'days-desc':
+        return getDaysUsed(b.purchaseDate) - getDaysUsed(a.purchaseDate);
+      case 'days-asc':
+        return getDaysUsed(a.purchaseDate) - getDaysUsed(b.purchaseDate);
+      case 'price-desc':
+        return b.purchasePrice - a.purchasePrice;
+      case 'price-asc':
+        return a.purchasePrice - b.purchasePrice;
+      case 'daily-cost-desc':
+        return (b.purchasePrice / Math.max(1, getDaysUsed(b.purchaseDate))) -
+          (a.purchasePrice / Math.max(1, getDaysUsed(a.purchaseDate)));
+      case 'daily-cost-asc':
+        return (a.purchasePrice / Math.max(1, getDaysUsed(a.purchaseDate))) -
+          (b.purchasePrice / Math.max(1, getDaysUsed(b.purchaseDate)));
+      case 'name-asc':
+        return a.name.localeCompare(b.name, 'zh-CN');
+      case 'updated-desc':
+      default:
+        return new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime();
+    }
+  });
 
   // 统计数据
   const statistics = allItems ? calculateAssetStatistics(allItems) : null;
@@ -256,9 +308,18 @@ export default function ItemList() {
             ))}
           </select>
         )}
+        <select
+          value={sortBy}
+          onChange={(e) => setSortBy(e.target.value as SortOption)}
+          aria-label="物品排序"
+        >
+          {SORT_OPTIONS.map((opt) => (
+            <option key={opt.value} value={opt.value}>{opt.label}</option>
+          ))}
+        </select>
       </div>
 
-      {/* 物品网格 */}
+      {/* 物品列表 */}
       {!allItems ? (
         <p className="text-secondary">加载中...</p>
       ) : filteredItems.length === 0 ? (
@@ -272,9 +333,13 @@ export default function ItemList() {
           )}
         </div>
       ) : (
-        <div className="item-list-grid">
-          {filteredItems.map((item) => (
-            <ItemCard key={item.id} item={item} />
+        <div className="item-list-table" aria-label="物品列表">
+          {sortedItems.map((item) => (
+            <ItemCard
+              key={item.id}
+              item={item}
+              categoryName={categories?.find((cat) => cat.id === item.categoryId)?.name}
+            />
           ))}
         </div>
       )}

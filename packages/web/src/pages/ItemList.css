@@ -242,23 +242,12 @@
   padding-right: var(--space-8);
 }
 
-/* 物品网格 */
-.item-list-grid {
-  display: grid;
-  gap: var(--space-4);
-  grid-template-columns: 1fr;
-}
-
-@media (min-width: 768px) {
-  .item-list-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media (min-width: 992px) {
-  .item-list-grid {
-    grid-template-columns: repeat(3, 1fr);
-  }
+/* 物品列表 */
+.item-list-table {
+  background-color: var(--color-bg-card);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-ring);
+  overflow: hidden;
 }
 
 /* 空状态 */
