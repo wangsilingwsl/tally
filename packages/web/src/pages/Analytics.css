@@ -43,7 +43,7 @@
 }
 
 .analytics-summary-value {
-  font-family: var(--font-title);
+  font-family: var(--font-body);
   font-size: var(--text-2xl);
   font-weight: var(--font-bold);
   color: var(--color-text-brand);

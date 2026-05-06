@@ -36,7 +36,7 @@
 }
 
 .dashboard-summary-value {
-  font-family: var(--font-title);
+  font-family: var(--font-body);
   font-size: var(--text-2xl);
   font-weight: var(--font-bold);
   color: var(--color-text-brand);
@@ -76,7 +76,7 @@
 }
 
 .dashboard-status-count {
-  font-family: var(--font-title);
+  font-family: var(--font-body);
   font-size: var(--text-xl);
   font-weight: var(--font-bold);
   color: var(--color-text-primary);
